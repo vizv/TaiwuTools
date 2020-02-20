@@ -1,0 +1,8 @@
+{
+    "Id": "UITest",
+    "DisplayName": "界面测试 Mod",
+    "Author": "vizv",
+    "Version": "0.1.0",
+    "AssemblyName": "UITest.dll",
+    "EntryMethod": "UITest.Main.Load"
+}
