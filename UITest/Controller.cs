@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace UITest
 {
@@ -12,163 +9,135 @@ namespace UITest
     {
         //private static Controller Instance;
         private static GameObject GameObjectInstance;
+        private int opacity = 6;
         private string debugText;
 
-        void Awake()
+        protected void Awake()
         {
-            Main.Logger.Log("Controller#Awake()");
-            SceneManager.sceneLoaded += onSceneLoaded;
+            //var allObjects = FindObjectsOfType<GameObject>().Where(it => it.name == "WelcomeDialog");
+            var allObjects = GameObject.Find("/UIRoot").GetComponentsInChildren<GameObject>().Where(it => it.name == "WelcomeDialog");
+
+            var go = GameObject.Find("WelcomeDialog");
+            var go1 = GameObject.Find("UIRoot");
+            var go2 = GameObject.Find("/UIRoot");
+            var go3 = GameObject.Find("Canvas");
+            var go4 = GameObject.Find("UIRoot/Canvas");
+            var go5 = GameObject.Find("UIRoot/Canvas/UIWindow");
+            var go6 = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack");
+            var go7 = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
+            debugText = $"{go?.name}/{go1?.name}/{go2.name}/{go3?.name}/{go4?.name}/{go5?.name}/{go6?.name}/{go7?.name}?{allObjects.Count()}";
         }
 
-        bool left;
-        bool bottom;
+        //private void Debug()
+        //{
+        //    var welcomeDialog = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
+        //}
 
-        void OnGUI()
+        protected void OnGUI()
         {
-            //var positions = "";
-            //var allGameObjects = FindObjectsOfType<GameObject>().Where(gameObject => gameObject.activeInHierarchy);
-            //foreach (var go in allGameObjects)
-            //{
-            //    positions += $"{String.Join("|", go.GetComponents<Component>().Select(comp => comp.GetType().Name).ToArray())}|";
-            //    //positions += $"{go.transform?.position.x},{go.transform?.position.y}|";
-            //}
+            if (opacity == 0) return;
+            GUI.color = new Color(1, 1, 1, opacity / 10f);
 
-            var screenWidth = (float)Screen.width;
-            var screenHeight = (float)Screen.height;
-            var position = Input.mousePosition;
+            // styles
+            GUIStyle boxStyle = new GUIStyle("box")
+            {
+                fixedWidth = Screen.width,
+                fixedHeight = Screen.height,
+            };
+            GUIStyle valueStyle = new GUIStyle("label");
+            valueStyle.normal.textColor = Color.red;
 
-            if (position.x < screenWidth / 4) left = true;
-            if (screenWidth - position.x < screenWidth / 4) left = false;
-            if (position.y < screenHeight / 3) bottom = true;
-            if (screenHeight - position.y < screenHeight / 3) bottom = false;
+            // get mouse position
+            var mousePosition = Camera.current.ScreenToWorldPoint(Input.mousePosition);
 
-            GUIStyle boxStyle = new GUIStyle("box");
-            boxStyle.normal.textColor = Color.black;
-            boxStyle.normal.background = Texture2D.whiteTexture;
-            boxStyle.fixedWidth = screenWidth / 4;
-            boxStyle.fixedHeight = screenHeight / 3;
-            boxStyle.alignment = TextAnchor.UpperRight;
-
-            GUIStyle labelStyle = new GUIStyle("label");
-            labelStyle.normal.textColor = Color.blue;
-
-            GUIStyle resultStyle = new GUIStyle("label");
-            resultStyle.normal.textColor = Color.red;
-
+            // get game object under mouse
             PointerEventData pointerData = new PointerEventData(EventSystem.current)
             {
                 pointerId = -1,
+                position = Input.mousePosition,
             };
-
-            pointerData.position = Input.mousePosition;
-
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
-
-            //Vector2 pos = Camera.current.ScreenToWorldPoint(Input.mousePosition);
-
-            //RaycastHit2D[] hits = Physics2D.RaycastAll(pos, new Vector2(0, 0), Mathf.Infinity);
-            //var output = "miss";
-            //if (hits.Length > 0) output = "" + hits.Length;
-
-            GUILayout.BeginArea(new Rect(0, 0, Screen.width, Screen.height));
-            GUILayout.BeginHorizontal();
-            if (left) GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical();
-            if (!bottom) GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical("DEBUG", boxStyle);
-            GUILayout.Label("Mouse Position:", labelStyle);
-            GUILayout.Label(position.ToString(), labelStyle);
-            GUILayout.Label("Game Object Under Mouse:", labelStyle);
-            //GUILayout.Label($"{allGameObjects.Count()}", labelStyle);
-            GUILayout.Label(results.Count() + "", labelStyle);
-            foreach (var result in results)
+            var result = results.FirstOrDefault();
+            var level = 0;
+            var resultOutput = "<nothing>";
+            if (results.Count() > 0)
             {
-                GUILayout.Label($"- /{dump(result.gameObject.transform)}", resultStyle);
+                resultOutput = Dump(result.gameObject.transform, ref level);
             }
-            //GUILayout.Label(pos.ToString(), labelStyle);
-            //GUILayout.Label(output, labelStyle);
-            //GUILayout.Label(positions, labelStyle);
+
+            GUILayout.BeginVertical(boxStyle);
+            GUILayout.Label("鼠标位置：");
+            GUILayout.Label($"({mousePosition.x:0.0},{mousePosition.y:0.0})", valueStyle); // FIXME: use format helper for vec3
+            GUILayout.Label($"当前鼠标下的 GameObjects (共 {level} 层)：");
+            GUILayout.Label(resultOutput, valueStyle);
+            GUILayout.Label("调试输出：");
+            GUILayout.Label(debugText, valueStyle);
             GUILayout.EndVertical();
-            if (bottom) GUILayout.FlexibleSpace();
-            GUILayout.EndVertical();
-            if (!left) GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
         }
 
-        private static string dump(Transform tf)
+        private static string Dump(Transform tf, ref int level, Transform childTf = null)
         {
-            if (tf.parent != null) {
-                return $"{dump(tf.parent)}/{tf.name}";
+            var parentOutput = "***";
+            if (tf.parent != null) parentOutput = Dump(tf.parent, ref level, tf);
+
+            var go = tf.gameObject;
+
+            var components = tf.GetComponents<Component>();
+            var gameBehaviours = components.Where(comp => comp is MonoBehaviour && comp.GetType().Namespace == null).ToArray();
+            var gameBehavioursOutput = string.Join(",", gameBehaviours.Select(comp => comp.GetType().Name));
+            var builtinBehaviours = components.Where(comp => comp is MonoBehaviour && comp.GetType().Namespace != null).ToArray();
+            var builtinBehavioursOutput = string.Join(",", builtinBehaviours.Select(comp => comp.GetType().Name));
+            var otherComponents = components.Where(comp => !(comp is MonoBehaviour)).ToArray();
+            var otherComponentsOutput = string.Join(",", otherComponents.Select(comp => comp.GetType().Name));
+
+            // FIXME: use format helper for vec3
+            var output = $"\n+ {tf.GetSiblingIndex()}:{tf.name}@({tf.position.x:0.0},{tf.position.y:0.0})";
+            if (gameBehaviours.Length > 0) output += $" game=[{gameBehavioursOutput}]";
+            if (builtinBehaviours.Length > 0) output += $" builtin=[{builtinBehavioursOutput}]";
+            if (otherComponents.Length > 0) output += $" components=[{otherComponentsOutput}]";
+            for (var i = 0; i < tf.childCount; i++)
+            {
+                var child = tf.GetChild(i);
+                output += child == childTf ? "***" : $"\n  - {i}:{child.name}";
             }
-            return tf.name;
+            output = output.Replace("\n", $"\n{string.Concat(Enumerable.Repeat("  ", level))}");
+
+            level++;
+            return parentOutput.Replace("***", output);
         }
 
-        private void onSceneLoaded(Scene scene, LoadSceneMode _mode)
+        protected void Update()
         {
-            Main.Logger.Log($"Controller#onSceneLoaded({scene.name})");
-        }
-
-        void Update()
-        {
-            // FIXME: DEBUG
+            // DEBUG
             if (Input.GetKeyDown("delete"))
             {
-                // DEBUG - dump all game objects
-                //var defaultScene = gameObject.scene;
-                //foreach (var go in defaultScene.GetRootGameObjects())
-                //{
-                //    dumpGameObject(go);
-                //}
-
-                //GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-
-                //Ray ray = Camera.current.ScreenPointToRay(Input.mousePosition);
-                //RaycastHit hit;
-
-                //if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~5))
-                //{
-                //    Main.Logger.Log(hit.transform.gameObject.name);
-                //}
-                //else
-                //{
-                //    Main.Logger.Log($"ray: {ray}");
-                //}
+                Awake();
             }
-        }
 
-        private static void dumpGameObject(GameObject gameObject, int level = 0)
-        {
-            var prefix = string.Concat(Enumerable.Repeat("  ", level)) + "- ";
-            Main.Logger.Log($"{prefix}+{gameObject.name}@{gameObject.transform.position}-{gameObject.layer}");
-
-            foreach (Component component in gameObject.GetComponents<Component>())
+            if (Input.GetKeyDown("-"))
             {
-                dumpComponent(component, level + 1);
+                opacity--;
+                if (opacity < 0) opacity = 0;
             }
 
-            foreach (Transform child in gameObject.transform)
+            if (Input.GetKeyDown("="))
             {
-                dumpGameObject(child.gameObject, level + 1);
+                opacity++;
+                if (opacity > 10) opacity = 10;
             }
-        }
 
-        private static void dumpComponent(Component component, int level = 0)
-        {
-            var prefix = string.Concat(Enumerable.Repeat("  ", level)) + "- ";
-            var name = component == null ? "(null)" : component.GetType().Name;
-            Main.Logger.Log($"{prefix}{name}");
+            if (Input.GetKeyDown("backspace"))
+            {
+                opacity = opacity > 5 ? 0 : 10;
+            }
         }
 
         internal static void Load()
         {
-            Main.Logger.Log("Controller.Load()");
             if (GameObjectInstance == null)
             {
-                Main.Logger.Log("Controller.Load() -> new Controller()");
                 GameObjectInstance = new GameObject("ControllerGameObject", typeof(Controller));
-                // GameObjectInstance.AddComponent(typeof(Controller));
                 DontDestroyOnLoad(GameObjectInstance);
             }
         }
