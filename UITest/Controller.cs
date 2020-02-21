@@ -12,31 +12,19 @@ namespace UITest
         private int opacity = 6;
         private string debugText;
 
-        protected void Awake()
+        private void Debug()
         {
-            //var allObjects = FindObjectsOfType<GameObject>().Where(it => it.name == "WelcomeDialog");
-            var allObjects = GameObject.Find("/UIRoot").GetComponentsInChildren<GameObject>().Where(it => it.name == "WelcomeDialog");
-
-            var go = GameObject.Find("WelcomeDialog");
-            var go1 = GameObject.Find("UIRoot");
-            var go2 = GameObject.Find("/UIRoot");
-            var go3 = GameObject.Find("Canvas");
-            var go4 = GameObject.Find("UIRoot/Canvas");
-            var go5 = GameObject.Find("UIRoot/Canvas/UIWindow");
-            var go6 = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack");
-            var go7 = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
-            debugText = $"{go?.name}/{go1?.name}/{go2.name}/{go3?.name}/{go4?.name}/{go5?.name}/{go6?.name}/{go7?.name}?{allObjects.Count()}";
+            var welcomeDialog = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
+            debugText = $"{welcomeDialog?.name}";
         }
-
-        //private void Debug()
-        //{
-        //    var welcomeDialog = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
-        //}
 
         protected void OnGUI()
         {
             if (opacity == 0) return;
             GUI.color = new Color(1, 1, 1, opacity / 10f);
+
+            GUIStyle borderStyle = new GUIStyle();
+            borderStyle.normal.background = Texture2D.whiteTexture;
 
             // styles
             GUIStyle boxStyle = new GUIStyle("box")
@@ -64,6 +52,19 @@ namespace UITest
             if (results.Count() > 0)
             {
                 resultOutput = Dump(result.gameObject.transform, ref level);
+                Vector3[] corners = new Vector3[4];
+                (result.gameObject.transform as RectTransform).GetWorldCorners(corners);
+                var minX = Mathf.Min(corners[0].x, corners[2].x);
+                var minY = Mathf.Min(corners[0].y, corners[2].y);
+                var maxX = Mathf.Max(corners[0].x, corners[2].x);
+                var maxY = Mathf.Max(corners[0].y, corners[2].y);
+                var minScreenPos = Camera.current.WorldToScreenPoint(new Vector3(minX, minY, 100));
+                var maxScreenPos = Camera.current.WorldToScreenPoint(new Vector3(maxX, maxY, 100));
+                var guiPos = new Vector2(minScreenPos.x, Screen.height - maxScreenPos.y);
+                var screenSize = maxScreenPos - minScreenPos;
+                var guiSize = new Vector2(Mathf.Abs(screenSize.x), Mathf.Abs(screenSize.y));
+                var rect = new Rect(guiPos, guiSize);
+                GUI.Box(rect, GUIContent.none, borderStyle);
             }
 
             GUILayout.BeginVertical(boxStyle);
@@ -112,7 +113,7 @@ namespace UITest
             // DEBUG
             if (Input.GetKeyDown("delete"))
             {
-                Awake();
+                Debug();
             }
 
             if (Input.GetKeyDown("-"))
