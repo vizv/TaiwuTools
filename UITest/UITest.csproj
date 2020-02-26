@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <ModPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mods\UITest</ModPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,8 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp-B1BD28F6F1F0267D0974F13EC9B44368C6A22F4FBF03A1FE374A4EA0E6E27360">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll Of Taiwu Alpha V1.0_Data\Managed\Assembly-CSharp-B1BD28F6F1F0267D0974F13EC9B44368C6A22F4FBF03A1FE374A4EA0E6E27360.dll</HintPath>
+    <Reference Include="0Harmony12">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll Of Taiwu Alpha V1.0_Data\Managed\0Harmony12.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-C494C09FC74BE0570F28669FD8A6563F21EF05A1E98AB2BBF9BA9B63B33CAADA">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll Of Taiwu Alpha V1.0_Data\Managed\Assembly-CSharp-C494C09FC74BE0570F28669FD8A6563F21EF05A1E98AB2BBF9BA9B63B33CAADA.dll</HintPath>
+    </Reference>
+    <Reference Include="AssetsReader">
+      <HintPath>..\..\ResourceLister\AssetsReader\bin\Debug\AssetsReader.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -237,8 +244,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller.cs" />
+    <Compile Include="Patches.cs" />
+    <Compile Include="UIKit\Core\ManagedObject.cs" />
+    <Compile Include="UIKit\GameObjects\Frame.cs" />
+    <Compile Include="UIKit\GameObjects\ManagedGameObject.cs" />
     <Compile Include="UITest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>COPY /Y "$(TargetDir)AssetsReader.dll" "$(ModPath)"
+COPY /Y "$(TargetDir)$(TargetFileName)" "$(ModPath)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
