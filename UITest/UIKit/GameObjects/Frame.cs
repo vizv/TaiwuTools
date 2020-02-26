@@ -13,7 +13,6 @@ namespace UIKit.GameObjects
 
         public override void Create()
         {
-            UITest.Main.Logger.Log("Frame#Create BEGIN");
             base.Create();
             ManagedObject.AddComponent<Image>();
 
@@ -28,7 +27,6 @@ namespace UIKit.GameObjects
             BackgroundImage.type = cimage.type;
             BackgroundImage.sprite = cimage.sprite;
             BackgroundImage.color = cimage.color;
-            UITest.Main.Logger.Log("Frame#Create END");
         }
 
         public override void Destroy()

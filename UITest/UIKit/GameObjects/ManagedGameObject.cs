@@ -33,11 +33,9 @@ namespace UIKit.GameObjects
 
         public virtual void Create()
         {
-            UITest.Main.Logger.Log("ManagedGameObject#Create BEGIN");
             if (managedObject) return;
             managedObject = new GameObject(DefaultArguments.Name);
             managedObject.SetActive(DefaultArguments.Active);
-            UITest.Main.Logger.Log("ManagedGameObject#Create END");
         }
 
         public virtual void Destroy()

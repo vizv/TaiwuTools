@@ -13,7 +13,6 @@ namespace UITest
 {
     class Controller : MonoBehaviour
     {
-        //private static Controller Instance;
         private static GameObject GameObjectInstance;
         private int opacity = 0;
         private string debugText;
@@ -22,159 +21,23 @@ namespace UITest
         private Queue<string> indexQueue;
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
-        //private GameObject vizFrame;
 
         private ManagedGameObject frame;
 
-        private void Awake()
+        protected void Awake()
         {
-            //// FIXME: make my own Canvas
-            var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
-
             frame = new Frame() {
                 DefaultArguments =
                 {
                     Name = "VizFrame",
-                    Margin = 100,
-                    //Active = false,
+                    Width = 600,
+                    Height = 400,
                 }
             };
-            //frame.SetParent(parent);
-
-            //var level = 0;
-            //debugText = Dump(frame.ManagedObject.transform, ref level);
         }
 
         private void Debug()
         {
-            //Object[] objects = Resources.LoadAll("");
-            //debugText = $"{objects?.Count()}";
-            //var welcomeDialog = GameObject.Find("UIRoot/Canvas/UIWindow/MianMenuBack/WelcomeDialog");
-            //debugText = $"{welcomeDialog?.name}";
-
-            //Object[] objects = Resources.LoadAll("");
-            //debugText = "Types: ";
-            //foreach (var o in objects)
-            //{
-            //    Main.Logger.Log($"{o.name}:{o.GetType()}");
-            //}
-
-            //Object[] objects = FindObjectsOfType<Object>();
-            //debugText = "Types: ";
-            //foreach (var o in objects)
-            //{
-            //    Main.Logger.Log($"{o.name}:{o.GetType()}");
-            //}
-
-            //var dialog = GameObject.Find("DialogBody");
-            //if (!dialog) return;
-            //var transform = dialog.GetComponent<RectTransform>();
-            //transform.sizeDelta = new Vector2(800, 600);
-
-            //dialog.transform.DetachChildren();
-
-            ////var canvasRender = dialog.GetComponent<CanvasRenderer>();
-            ////debugText = canvasRender.hasRectClipping.ToString();
-            ////var transform = dialog.GetComponent<RectTransform>();
-            ////debugText = transform.anchoredPosition.ToString();
-
-            //var cimage = dialog.GetComponent<CImage>();
-            ////var sprite = cimage.sprite;
-            //var sprite = Resources.Load<Sprite>("graphics/baseui/gui_window_small_black_nocolor");
-            //debugText = $"texture={sprite.texture}, rect={sprite.rect}, pivot={sprite.pivot}, pixelsPerUnit={sprite.pixelsPerUnit}, border={sprite.border}";
-            //cimage.sprite = sprite;
-            ////cimage.sprite = Sprite.Create(sprite.texture, sprite.rect, sprite.pivot, sprite.pixelsPerUnit, 0, SpriteMeshType.FullRect, new Vector4(50,50,50,50), false);
-            ////debugText = string.Join("/", sprite.vertices.Select(vertex => vertex.ToString()));
-
-            //var uiBackground = GameObject.Find("/UIRoot/Canvas/UIBackGround");
-            //var sprite = Resources.Load<Sprite>("graphics/baseui/gui_window_small_black_nocolor");
-            //var canvas = GameObject.Find("/UIRoot/Canvas");
-            //canvas.transform.DetachChildren();
-            //var vizTester = new GameObject("VizTester", typeof(Image));
-            //vizTester.layer = canvas.layer;
-            ////vizTester.transform.position = new Vector3(-100, 0, 100);
-            //vizTester.transform.SetParent(canvas.transform, false);
-            //vizTester.transform.parent = canvas.transform;
-            //vizTester.transform.SetAsLastSibling();
-            //var rectTransform = vizTester.GetComponent<RectTransform>();
-            ////rectTransform.position = new Vector3(-100, 0, 100);
-            //rectTransform.SetParent(canvas.transform, false);
-            //rectTransform.SetAsLastSibling();
-            //rectTransform.parent = canvas.transform;
-            //vizTester.GetComponent<Image>().sprite = sprite;
-            ////vizTester.GetComponent<Image>().color = new Color32(254, 47, 17, 255); // ???
-            ////vizTester.transform.localScale = new Vector3(1, 1, 1);
-            //vizTester.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 600);
-            ////vizTester.GetComponent<Image>().preserveAspect = true; // ???
-            //vizTester.SetActive(true);
-            //canvas.SetActive(false);
-            //canvas.SetActive(true);
-            //var level = 0;
-            //debugText = Dump(vizTester.transform, ref level);
-
-
-            //UIManager.Instance.AddUI("ui_Dialog", "TEST", "MESSAGE");
-
-            //var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog");
-            //var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
-            //var obj = Instantiate(dialog);
-            //obj.name = "Test Dialog";
-            //UIBase component = obj.GetComponent<UIBase>();
-            //component.transform.SetParent(parent, worldPositionStays: false);
-            //component.gameObject.SetActive(value: false);
-            //// PlaceUI(component);
-            //component.gameObject.SetActive(value: true);
-
-            //var screenSize = new Vector3(Screen.width, Screen.height);
-            //var worldSize = Camera.current.ScreenToWorldPoint(screenSize);
-            //debugText = worldSize.ToString();
-
-            //var sprite = Resources.Load<Sprite>("graphics/baseui/gui_window_big_black_nocolor");
-            //debugText = $"texture={sprite.texture}, rect={sprite.rect}, pivot={sprite.pivot}, pixelsPerUnit={sprite.pixelsPerUnit}, border={sprite.border}";
-            //var dialog = GameObject.Find("DialogBody");
-            //sprite = dialog.GetComponent<CImage>().sprite;
-            //debugText += $"\ntexture={sprite.texture}, rect={sprite.rect}, pivot={sprite.pivot}, pixelsPerUnit={sprite.pixelsPerUnit}, border={sprite.border}";
-            var marginSize = 100;
-            var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
-            var vizTester = new GameObject("VizTester", typeof(CImage));
-            vizTester.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 2 * marginSize, Screen.height - 2 * marginSize);
-            //vizTester.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
-            var image = vizTester.GetComponent<CImage>();
-            //image.type = Image.Type.Sliced;
-            //image.sprite = sprite;
-            //vizTester.transform.localScale = new Vector3(1, 1, 1);
-            vizTester.transform.SetParent(parent, worldPositionStays: false);
-            //vizTester.SetActive(value: false);
-            vizTester.SetActive(value: true);
-            //var vizMask = new GameObject("VizMask", typeof(MaskImage));
-            //vizMask.GetComponent<MaskImage>().enabled = true;
-            //vizMask.transform.SetParent(vizTester.transform);
-            //vizMask.SetActive(value: true);
-
-            //var mask = GameObject.Find("WelcomeDialog");
-            //if (!mask) return;
-            //mask = mask.transform.GetChild(0).gameObject;
-            //Destroy(mask);
-            ////var level = 0;
-            ////debugText = Dump(mask.transform, ref level);
-            ////debugText = cimage.sprite.ToString();
-
-            //var dialog = GameObject.Find("DialogBody");
-            //if (!dialog) return;
-            //var cimage = dialog.GetComponent<CImage>();
-            ////debugText = string.Join(",", cimage.GetComponents<Component>().Select(comp => comp.GetType().FullName));
-            //image.color = cimage.color;
-
-            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform;
-            var level = 0;
-            dialog = dialog.Find("Dialog");
-            debugText = Dump(dialog, ref level);
-            //debugText = dialog.GetType().FullName;
-            //dialog = Instantiate(dialog);
-            var cimage = dialog.GetComponent<CImage>();
-            image.type = cimage.type;
-            image.sprite = cimage.sprite;
-            image.color = cimage.color;
         }
         private void IndexResources()
         {
@@ -358,14 +221,13 @@ namespace UITest
             debugText = $"{frame.Created}";
             if (Input.GetKeyDown("f10"))
             {
+                // FIXME: use utility
                 var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
-                //debugText = $"{vizFrame.activeSelf}";
-                //vizFrame.SetActive(!vizFrame.activeSelf);
+
                 if (frame.Created)
                     frame.Destroy();
                 else
                     frame.SetParent(parent);
-                //frame.SetActive(!frame.IsActive);
             }
         }
 
