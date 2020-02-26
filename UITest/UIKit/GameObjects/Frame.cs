@@ -5,17 +5,21 @@ namespace UIKit.GameObjects
 {
     class Frame : ManagedGameObject
     {
-        public readonly Image BackgroundImage;
+        public Image BackgroundImage => ManagedObject.GetComponent<Image>();
 
-        public Frame(string name, int width = 0, int height = 0, int margin = 0) : base(name)
+        public new Arguments DefaultArguments;
+        public Frame() : this(new Arguments()) { }
+        public Frame(Arguments arguments) : base(arguments) => DefaultArguments = arguments;
+
+        public override void Create()
         {
-            BackgroundImage = AddComponent<Image>();
+            UITest.Main.Logger.Log("Frame#Create BEGIN");
+            base.Create();
+            ManagedObject.AddComponent<Image>();
 
-            if (width == 0 && height == 0)
-            {
-                width = Screen.width - margin * 2;
-                height = Screen.height - margin * 2;
-            }
+            (var width, var height, var margin) = (DefaultArguments.Width, DefaultArguments.Height, DefaultArguments.Margin);
+            if (width == 0) width = Screen.width - margin * 2;
+            if (height == 0) height = Screen.height - margin * 2;
             RectTransform.sizeDelta = new Vector2(width, height);
 
             // FIXME: use utility
@@ -24,6 +28,19 @@ namespace UIKit.GameObjects
             BackgroundImage.type = cimage.type;
             BackgroundImage.sprite = cimage.sprite;
             BackgroundImage.color = cimage.color;
+            UITest.Main.Logger.Log("Frame#Create END");
+        }
+
+        public override void Destroy()
+        {
+            base.Destroy();
+        }
+
+        public new class Arguments : ManagedGameObject.Arguments
+        {
+            public int Width = 0;
+            public int Height = 0;
+            public int Margin = 0;
         }
     }
 }

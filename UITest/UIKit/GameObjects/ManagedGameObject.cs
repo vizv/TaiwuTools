@@ -1,43 +1,56 @@
-﻿using System;
-using UIKit.Core;
+﻿using UIKit.Core;
 using UnityEngine;
 
 namespace UIKit.GameObjects
 {
     public abstract class ManagedGameObject : ManagedObject<GameObject>
     {
-        public GameObject ManagedObject => managedObject;
-        public bool IsActive => managedObject.activeSelf;
-        public RectTransform RectTransform => managedObject.GetComponent<RectTransform>();
-
-
-        protected ManagedGameObject(string name)
+        public GameObject ManagedObject
         {
-            managedObject = new GameObject(name);
+            get
+            {
+                if (!managedObject) Create();
+                return managedObject;
+            }
         }
+
+        public bool Created => !Destroyed;
+        public bool Destroyed => !managedObject;
+        public bool IsActive => ManagedObject.activeSelf;
+        public RectTransform RectTransform => ManagedObject.GetComponent<RectTransform>();
+        public string Name => ManagedObject.name;
+
+        public Arguments DefaultArguments;
+        protected ManagedGameObject(Arguments arguments) => DefaultArguments = arguments;
 
         public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.ManagedObject, worldPositionStays);
         public void SetParent(GameObject gameObject, bool worldPositionStays = false) => SetParent(gameObject.transform, worldPositionStays);
-        public void SetParent(Transform transform, bool worldPositionStays = false) => managedObject.transform.SetParent(transform, worldPositionStays);
+        public void SetParent(Transform transform, bool worldPositionStays = false) => ManagedObject.transform.SetParent(transform, worldPositionStays);
 
-        public void SetActive(bool value) => managedObject.SetActive(value);
+        public void SetActive(bool value) => ManagedObject.SetActive(value);
 
-        //public abstract static T Create<T>(params object[] args) where T : GameObject;
-        //{
-        //    if (typeof(T) == typeof(GameObject))
-        //    {
-        //        // TODO: throw Invalid Argument Exception
-        //        return null;
-        //    }
+        public T AddComponent<T>() where T : Component => ManagedObject.AddComponent<T>();
 
-        //    //Main.Logger.Log(string.Join(",", args.Select(arg => arg.ToString())));
-        //    //Main.Logger.Log(args.ToString());
-        //    return typeof(T).GetMethod("Create", BindingFlags.Public | BindingFlags.Static).Invoke(null, args) as T;
-        //}
-
-        public T AddComponent<T>() where T : Component
+        public virtual void Create()
         {
-            return managedObject.AddComponent<T>();
+            UITest.Main.Logger.Log("ManagedGameObject#Create BEGIN");
+            if (managedObject) return;
+            managedObject = new GameObject(DefaultArguments.Name);
+            managedObject.SetActive(DefaultArguments.Active);
+            UITest.Main.Logger.Log("ManagedGameObject#Create END");
+        }
+
+        public virtual void Destroy()
+        {
+            if (!managedObject) return;
+            Object.Destroy(managedObject);
+            managedObject = null;
+        }
+
+        public class Arguments
+        {
+            public string Name = "UntitledUIKitGameObject";
+            public bool Active = true;
         }
     }
 }

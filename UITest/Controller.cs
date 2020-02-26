@@ -28,31 +28,21 @@ namespace UITest
 
         private void Awake()
         {
-            //var frameMargin = 100;
-            //var frameSize = new Vector2(Screen.width - 2 * frameMargin, Screen.height - 2 * frameMargin);
-
             //// FIXME: make my own Canvas
             var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
 
-            //vizFrame = new GameObject("VizFrame", typeof(Image)); //
-            //vizFrame.GetComponent<RectTransform>().sizeDelta = frameSize; //
-            //var frameImage = vizFrame.GetComponent<Image>(); //
+            frame = new Frame() {
+                DefaultArguments =
+                {
+                    Name = "VizFrame",
+                    Margin = 100,
+                    //Active = false,
+                }
+            };
+            //frame.SetParent(parent);
 
-            //var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
-            //var cimage = dialog.GetComponent<CImage>();
-            //frameImage.type = cimage.type;
-            //frameImage.sprite = cimage.sprite;
-            //frameImage.color = cimage.color;
-
-            //vizFrame.transform.SetParent(parent, worldPositionStays: false);
-            //vizFrame.SetActive(false);
-
-            frame = new Frame("VizFrame", margin: 100);
-            frame.SetParent(parent);
-            frame.SetActive(false);
-
-            var level = 0;
-            debugText = Dump(frame.ManagedObject.transform, ref level);
+            //var level = 0;
+            //debugText = Dump(frame.ManagedObject.transform, ref level);
         }
 
         private void Debug()
@@ -288,16 +278,9 @@ namespace UITest
                 var screenSize = maxScreenPos - minScreenPos;
                 var guiSize = new Vector2(Mathf.Abs(screenSize.x), Mathf.Abs(screenSize.y));
                 var rect = new Rect(guiPos, guiSize);
-                GUI.Box(rect, GUIContent.none, borderStyle);
+                //GUI.Box(rect, GUIContent.none, borderStyle); // Draw box
             }
 
-            // get currently cached resources
-            //var resLoaderInstance = SingletonObject.getInstance<ResLoader>();
-            //Dictionary<string, Object> resourcesCache = null;
-            //if (resLoaderInstance != null)
-            //{
-            //    resourcesCache = (Dictionary<string, Object>)typeof(ResLoader).GetField("loadedCache", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(resLoaderInstance);
-            //}
             var uiRoot = GameObject.Find("/UIRoot");
             var goCount = DebugCount(uiRoot.transform);
 
@@ -372,11 +355,17 @@ namespace UITest
                 opacity = opacity > 5 ? 0 : 10;
             }
 
+            debugText = $"{frame.Created}";
             if (Input.GetKeyDown("f10"))
             {
+                var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
                 //debugText = $"{vizFrame.activeSelf}";
                 //vizFrame.SetActive(!vizFrame.activeSelf);
-                frame.SetActive(!frame.IsActive);
+                if (frame.Created)
+                    frame.Destroy();
+                else
+                    frame.SetParent(parent);
+                //frame.SetActive(!frame.IsActive);
             }
         }
 
