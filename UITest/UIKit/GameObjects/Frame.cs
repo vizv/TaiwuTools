@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UIKit.GameObjects
@@ -7,19 +8,45 @@ namespace UIKit.GameObjects
     {
         public Image BackgroundImage => ManagedObject.GetComponent<Image>();
 
-        public new Arguments DefaultArguments;
+        public new Arguments Default;
         public Frame() : this(new Arguments()) { }
-        public Frame(Arguments arguments) : base(arguments) => DefaultArguments = arguments;
+        public Frame(Arguments arguments) : base(arguments) => Default = arguments;
 
         public override void Create()
         {
             base.Create();
             ManagedObject.AddComponent<Image>();
 
-            (var width, var height, var margin) = (DefaultArguments.Width, DefaultArguments.Height, DefaultArguments.Margin);
-            if (width == 0) width = Screen.width - margin * 2;
-            if (height == 0) height = Screen.height - margin * 2;
-            RectTransform.sizeDelta = new Vector2(width, height);
+            var pivot = new Vector2(0.5f, 0.5f);
+            var anchorMin = pivot;
+            var anchorMax = pivot;
+            var sizeDelta = new Vector2(Default.Width, Default.Height);
+            var anchorPosition = (pivot - new Vector2(0.5f, 0.5f)) * 2 * -Default.Margin;
+
+            if (Default.Width == 0) (anchorMin.x, anchorMax.x, sizeDelta.x) = (0, 1, -Default.Margin * 2);
+            if (Default.Height == 0) (anchorMin.y, anchorMax.y, sizeDelta.y) = (0, 1, -Default.Margin * 2);
+
+            RectTransform.pivot = pivot;
+            RectTransform.anchorMin = anchorMin;
+            RectTransform.anchorMax = anchorMax;
+            RectTransform.sizeDelta = sizeDelta;
+            RectTransform.anchoredPosition = anchorPosition;
+
+            //UITest.Main.Logger.Log($"{RectTransform.rect}@{RectTransform.position}");
+
+            //UITest.Main.Logger.Log($"pivot: {RectTransform.pivot}");
+            //UITest.Main.Logger.Log($"anchorMin: {RectTransform.anchorMin}");
+            //UITest.Main.Logger.Log($"anchorMax: {RectTransform.anchorMax}");
+            //UITest.Main.Logger.Log($"sizeDelta: {RectTransform.sizeDelta}");
+            //UITest.Main.Logger.Log($"anchoredPosition: {RectTransform.anchoredPosition}");
+
+            //UITest.Main.Logger.Log($"offsetMin: {RectTransform.offsetMax}");
+            //UITest.Main.Logger.Log($"offsetMax: {RectTransform.offsetMax}");
+            //UITest.Main.Logger.Log($"rect: {RectTransform.rect}");
+            //UITest.Main.Logger.Log($"top: {RectTransform.rect.yMax}");
+            //UITest.Main.Logger.Log($"right: {RectTransform.rect.xMax}");
+            //UITest.Main.Logger.Log($"bottom: {RectTransform.rect.yMin}");
+            //UITest.Main.Logger.Log($"left: {RectTransform.rect.xMin}");
 
             // FIXME: use utility
             var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
@@ -34,6 +61,7 @@ namespace UIKit.GameObjects
             base.Destroy();
         }
 
+        [Serializable()]
         public new class Arguments : ManagedGameObject.Arguments
         {
             public int Width = 0;

@@ -1,4 +1,5 @@
-﻿using UIKit.Core;
+﻿using System;
+using UIKit.Core;
 using UnityEngine;
 
 namespace UIKit.GameObjects
@@ -20,8 +21,8 @@ namespace UIKit.GameObjects
         public RectTransform RectTransform => ManagedObject.GetComponent<RectTransform>();
         public string Name => ManagedObject.name;
 
-        public Arguments DefaultArguments;
-        protected ManagedGameObject(Arguments arguments) => DefaultArguments = arguments;
+        public Arguments Default;
+        protected ManagedGameObject(Arguments arguments) => Default = arguments;
 
         public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.ManagedObject, worldPositionStays);
         public void SetParent(GameObject gameObject, bool worldPositionStays = false) => SetParent(gameObject.transform, worldPositionStays);
@@ -34,17 +35,18 @@ namespace UIKit.GameObjects
         public virtual void Create()
         {
             if (managedObject) return;
-            managedObject = new GameObject(DefaultArguments.Name);
-            managedObject.SetActive(DefaultArguments.Active);
+            managedObject = new GameObject(Default.Name);
+            managedObject.SetActive(Default.Active);
         }
 
         public virtual void Destroy()
         {
             if (!managedObject) return;
-            Object.Destroy(managedObject);
+            UnityEngine.Object.Destroy(managedObject);
             managedObject = null;
         }
 
+        [Serializable()]
         public class Arguments
         {
             public string Name = "UntitledUIKitGameObject";
