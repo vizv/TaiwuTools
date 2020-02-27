@@ -26,7 +26,8 @@ namespace UITest
 
         protected void Awake()
         {
-            frame = new Frame() {
+            frame = new Frame()
+            {
                 Default =
                 {
                     Name = "VizFrame",
@@ -135,7 +136,7 @@ namespace UITest
             while (!request.isDone)
             {
                 //Main.Logger.Log($"DEBUG: Loading {path}...");
-                indexingMessage= $"[{resourceIndex.Count() - indexQueue.Count()}/{resourceIndex.Count()}] 正在检索 {path}...";
+                indexingMessage = $"[{resourceIndex.Count() - indexQueue.Count()}/{resourceIndex.Count()}] 正在检索 {path}...";
                 yield return null;
             }
 
@@ -293,7 +294,58 @@ namespace UITest
                 if (frame.Created)
                     frame.Destroy();
                 else
+                {
                     frame.SetParent(parent);
+                    
+                    var fHlg = frame.AddComponent<HorizontalLayoutGroup>();
+                    fHlg.padding = new RectOffset(50, 50, 50, 50);
+                    fHlg.childForceExpandWidth = false;
+                    fHlg.childAlignment = TextAnchor.UpperLeft;
+
+                    var b1 = new GameObject($"TestBlock-1", typeof(Image));
+                    var b1Rt = b1.GetComponent<RectTransform>();
+                    var b1I = b1.GetComponent<Image>();
+
+                    var b1Le = b1.AddComponent<LayoutElement>();
+                    b1Le.preferredWidth = 200;
+
+                    b1I.color = Color.red;
+
+
+                    var b2 = new GameObject($"TestBlock-2", typeof(Image));
+                    var b2Rt = b2.GetComponent<RectTransform>();
+                    var b2I = b2.GetComponent<Image>();
+                    b2I.color = Color.blue;
+
+                    var b2Le = b2.AddComponent<LayoutElement>();
+                    b2Le.flexibleWidth = 1;
+
+                    b1Rt.SetParent(frame.RectTransform, false);
+                    b2Rt.SetParent(frame.RectTransform, false);
+                    ////var fGlg = frame.AddComponent<GridLayoutGroup>();
+                    ////fGlg.padding = new RectOffset(50, 50, 50, 50);
+                    ////fGlg.childAlignment = TextAnchor.UpperLeft;
+                    ////var fCsf = frame.AddComponent<ContentSizeFitter>();
+                    ////fCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    ////var fLe = frame.AddComponent<LayoutElement>();
+                    ////fLe.flexibleHeight = 1000;
+
+                    //var b = new GameObject($"TestBlock", typeof(Image));
+                    //var bRt = b.GetComponent<RectTransform>();
+                    //var bI = b.GetComponent<Image>();
+                    //bI.color = Color.red;
+                    //bRt.sizeDelta = new Vector2(600, 600);
+                    //bRt.SetParent(frame.RectTransform, false);
+                    //bRt.fle
+
+                    //var fLe = b.AddComponent<LayoutElement>();
+                    //fLe.flexibleHeight = 1000;
+                    //var nestedFrame = new Frame()
+                    //{
+                    //    Default = { Name = "VizNestedFrame", Margin = 30 }
+                    //};
+                    //nestedFrame.SetParent(frame);
+                }
             }
         }
 

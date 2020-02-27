@@ -17,6 +17,7 @@ namespace UIKit.GameObjects
             base.Create();
             ManagedObject.AddComponent<Image>();
 
+            // FIXME: use Layout Helper
             var pivot = new Vector2(0.5f, 0.5f);
             var anchorMin = pivot;
             var anchorMax = pivot;
