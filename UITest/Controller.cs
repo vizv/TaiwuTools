@@ -306,12 +306,6 @@ namespace UITest
                 {
                     canvas.SetParent(parent);
                     frame.SetParent(canvas);
-                    //frame.SetParent(parent);
-                    
-                    var fHlg = frame.AddComponent<HorizontalLayoutGroup>();
-                    fHlg.padding = new RectOffset(50, 50, 50, 50);
-                    fHlg.childForceExpandWidth = false;
-                    fHlg.childAlignment = TextAnchor.UpperLeft;
 
                     var b1 = new GameObject($"TestBlock-1", typeof(Image));
                     var b1Rt = b1.GetComponent<RectTransform>();

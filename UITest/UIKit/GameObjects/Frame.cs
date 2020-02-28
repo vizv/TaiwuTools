@@ -1,4 +1,4 @@
-﻿using System;
+﻿using UIKit.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +6,7 @@ namespace UIKit.GameObjects
 {
     public class Frame : ManagedGameObject
     {
-        public Image BackgroundImage => ManagedObject.GetComponent<Image>();
+        public Image BackgroundImage => Get<Image>();
 
         public new Arguments Default;
         public Frame() : this(new Arguments()) { }
@@ -15,7 +15,7 @@ namespace UIKit.GameObjects
         public override void Create()
         {
             base.Create();
-            ManagedObject.AddComponent<Image>();
+            //ManagedObject.AddComponent<Image>();
 
             // FIXME: use Layout Helper
             var pivot = new Vector2(0.5f, 0.5f);
@@ -55,9 +55,17 @@ namespace UIKit.GameObjects
             BackgroundImage.type = cimage.type;
             BackgroundImage.sprite = cimage.sprite;
             BackgroundImage.color = cimage.color;
+
+            BoxModel boxModel = Get<HorizontalBoxModel>();
+            boxModel.Apply(new BoxModel.Arguments()
+            {
+                Padding = { 50 },
+            });
+
+            boxModel.LayoutGroup.childForceExpandWidth = false;
+            boxModel.LayoutGroup.childAlignment = TextAnchor.UpperLeft;
         }
 
-        [Serializable()]
         public new class Arguments : ManagedGameObject.Arguments
         {
             public int Width = 0;

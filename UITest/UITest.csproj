@@ -245,6 +245,12 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
+    <Compile Include="UIKit\Components\HorizontalBoxModel.cs" />
+    <Compile Include="UIKit\Components\VerticalBoxModel .cs" />
+    <Compile Include="UIKit\Components\BoxModel.cs" />
+    <Compile Include="UIKit\Components\ManagedComponent.cs" />
+    <Compile Include="UIKit\Core\Attributes.cs" />
+    <Compile Include="UIKit\Core\IManagedComponent.cs" />
     <Compile Include="UIKit\Core\ManagedObject.cs" />
     <Compile Include="UIKit\GameObjects\Frame.cs" />
     <Compile Include="UIKit\GameObjects\ManagedGameObject.cs" />

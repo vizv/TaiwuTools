@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UIKit.Core;
 using UnityEngine;
 
@@ -15,10 +16,14 @@ namespace UIKit.GameObjects
             }
         }
 
+        // TODO: change to mixin???
+        protected T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
+        protected Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
+
         public bool Created => !Destroyed;
         public bool Destroyed => !managedObject;
         public bool IsActive => ManagedObject.activeSelf;
-        public RectTransform RectTransform => ManagedObject.GetComponent<RectTransform>();
+        public RectTransform RectTransform => Get<RectTransform>();
         public string Name => ManagedObject.name;
 
         public Arguments Default;
@@ -46,11 +51,12 @@ namespace UIKit.GameObjects
             managedObject = null;
         }
 
-        [Serializable()]
-        public class Arguments
+        public class Arguments : Attributes
         {
             public string Name = "UntitledUIKitGameObject";
             public bool Active = true;
+
+            //public Dictionary<C, C>
         }
     }
 }
