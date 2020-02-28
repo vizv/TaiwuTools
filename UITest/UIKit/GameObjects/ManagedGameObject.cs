@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UIKit.Components;
 using UIKit.Core;
 using UnityEngine;
 
@@ -42,6 +43,14 @@ namespace UIKit.GameObjects
             if (managedObject) return;
             managedObject = new GameObject(Default.Name);
             managedObject.SetActive(Default.Active);
+
+            foreach (var componentPair in Default.Components)
+            {
+                var component = ManagedObject.AddComponent(componentPair.Key) as ManagedComponent;
+                if (!component) continue;
+
+                component.Apply(componentPair.Value);
+            }
         }
 
         public virtual void Destroy()
@@ -56,7 +65,7 @@ namespace UIKit.GameObjects
             public string Name = "UntitledUIKitGameObject";
             public bool Active = true;
 
-            //public Dictionary<C, C>
+            public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
         }
     }
 }

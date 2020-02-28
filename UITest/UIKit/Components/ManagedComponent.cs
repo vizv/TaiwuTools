@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UIKit.Components
 {
-    public abstract class ManagedComponent<A> : MonoBehaviour, IManagedComponent<A> where A : Attributes
+    public abstract class ManagedComponent : MonoBehaviour
     {
         protected GameObject ManagedObject => gameObject;
 
@@ -12,7 +12,7 @@ namespace UIKit.Components
         protected T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
         protected Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
 
-        public virtual void Apply(A arguments)
+        public virtual void Apply(Arguments arguments)
         {
             throw new NotImplementedException();
         }

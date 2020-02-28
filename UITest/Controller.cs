@@ -8,6 +8,7 @@ using System.Collections;
 using System;
 using UnityEngine.UI;
 using UIKit.GameObjects;
+using UIKit.Components;
 
 namespace UITest
 {
@@ -41,8 +42,18 @@ namespace UITest
                 {
                     Name = "VizFrame",
                     Margin = 30,
-                    //Height = 300,
-                    //Width = 300,
+                    Height = 600,
+                    Components =
+                    {
+                        {
+                            typeof(BoxModel),
+                            new BoxModel.Arguments() {
+                                Direction = BoxModel.Direction.Horizontal,
+                                Padding = { 0, 50, 100, 200 },
+                                ChildrenAlignment = TextAnchor.UpperRight,
+                            }
+                        }
+                    }
                 }
             };
         }

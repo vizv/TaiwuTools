@@ -56,14 +56,8 @@ namespace UIKit.GameObjects
             BackgroundImage.sprite = cimage.sprite;
             BackgroundImage.color = cimage.color;
 
-            BoxModel boxModel = Get<HorizontalBoxModel>();
-            boxModel.Apply(new BoxModel.Arguments()
-            {
-                Padding = { 50 },
-            });
-
+            BoxModel boxModel = ManagedObject.GetComponent<BoxModel>();
             boxModel.LayoutGroup.childForceExpandWidth = false;
-            boxModel.LayoutGroup.childAlignment = TextAnchor.UpperLeft;
         }
 
         public new class Arguments : ManagedGameObject.Arguments
