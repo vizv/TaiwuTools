@@ -22,10 +22,19 @@ namespace UITest
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
 
+        private ManagedGameObject canvas;
         private ManagedGameObject frame;
 
         protected void Awake()
         {
+            canvas = new OverlayCanvas()
+            {
+                Default =
+                {
+                    Name = "VizCanvas",
+                }
+            };
+
             frame = new Frame()
             {
                 Default =
@@ -289,13 +298,15 @@ namespace UITest
             if (Input.GetKeyDown("f10"))
             {
                 // FIXME: use utility
-                var parent = GameObject.Find("/UIRoot/Canvas/UIPopup").transform;
+                var parent = GameObject.Find("/UIRoot").transform;
 
                 if (frame.Created)
                     frame.Destroy();
                 else
                 {
-                    frame.SetParent(parent);
+                    canvas.SetParent(parent);
+                    frame.SetParent(canvas);
+                    //frame.SetParent(parent);
                     
                     var fHlg = frame.AddComponent<HorizontalLayoutGroup>();
                     fHlg.padding = new RectOffset(50, 50, 50, 50);

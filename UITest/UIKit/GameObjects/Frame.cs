@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UIKit.GameObjects
 {
-    class Frame : ManagedGameObject
+    public class Frame : ManagedGameObject
     {
         public Image BackgroundImage => ManagedObject.GetComponent<Image>();
 
@@ -55,11 +55,6 @@ namespace UIKit.GameObjects
             BackgroundImage.type = cimage.type;
             BackgroundImage.sprite = cimage.sprite;
             BackgroundImage.color = cimage.color;
-        }
-
-        public override void Destroy()
-        {
-            base.Destroy();
         }
 
         [Serializable()]
