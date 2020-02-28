@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using UIKit.Components;
-using UIKit.Core;
 using UnityEngine;
 
-namespace UIKit.GameObjects
+namespace UIKit.Core
 {
     public abstract class ManagedGameObject : ManagedObject<GameObject>
     {

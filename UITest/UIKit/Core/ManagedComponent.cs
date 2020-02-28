@@ -1,8 +1,7 @@
 ﻿using System;
-using UIKit.Core;
 using UnityEngine;
 
-namespace UIKit.Components
+namespace UIKit.Core
 {
     public abstract class ManagedComponent : MonoBehaviour
     {

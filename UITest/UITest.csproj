@@ -246,11 +246,11 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="UIKit\Components\BoxModel.cs" />
-    <Compile Include="UIKit\Components\ManagedComponent.cs" />
+    <Compile Include="UIKit\Core\ManagedComponent.cs" />
     <Compile Include="UIKit\Core\Attributes.cs" />
     <Compile Include="UIKit\Core\ManagedObject.cs" />
     <Compile Include="UIKit\GameObjects\Frame.cs" />
-    <Compile Include="UIKit\GameObjects\ManagedGameObject.cs" />
+    <Compile Include="UIKit\Core\ManagedGameObject.cs" />
     <Compile Include="UIKit\GameObjects\OverlayCanvas.cs" />
     <Compile Include="UITest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

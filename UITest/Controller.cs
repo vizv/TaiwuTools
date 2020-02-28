@@ -9,6 +9,7 @@ using System;
 using UnityEngine.UI;
 using UIKit.GameObjects;
 using UIKit.Components;
+using UIKit.Core;
 
 namespace UITest
 {
