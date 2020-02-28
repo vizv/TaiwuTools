@@ -26,6 +26,8 @@ namespace UITest
         private ManagedGameObject canvas;
         private ManagedGameObject frame;
 
+        private BoxModel.Arguments boxModelArgs;
+
         protected void Awake()
         {
             canvas = new OverlayCanvas()
@@ -34,6 +36,13 @@ namespace UITest
                 {
                     Name = "VizCanvas",
                 }
+            };
+
+            boxModelArgs = new BoxModel.Arguments()
+            {
+                Direction = BoxModel.Direction.Horizontal,
+                Padding = { 0, 50, 100, 200 },
+                ChildrenAlignment = TextAnchor.UpperRight,
             };
 
             frame = new Frame()
@@ -47,82 +56,84 @@ namespace UITest
                     {
                         {
                             typeof(BoxModel),
-                            new BoxModel.Arguments() {
-                                Direction = BoxModel.Direction.Horizontal,
-                                Padding = { 0, 50, 100, 200 },
-                                ChildrenAlignment = TextAnchor.UpperRight,
-                            }
-                        }
-                    }
-                }
+                            boxModelArgs
+                        },
+                    },
+                },
             };
         }
 
         private void Debug()
         {
-            var vf = GameObject.Find("VizFrame");
-            if (!vf) return;
+            boxModelArgs.Direction = boxModelArgs.Direction == BoxModel.Direction.Horizontal
+                ? BoxModel.Direction.Vertical
+                : BoxModel.Direction.Horizontal;
+            var boxModel = frame.Get<BoxModel>();
+            boxModel.Apply(boxModelArgs);
 
-            vf.AddComponent<Mask>();
+            //var vf = GameObject.Find("VizFrame");
+            //if (!vf) return;
 
-            var tsv = new GameObject("TestScrollView", typeof(ScrollRect));
-            var tsvRt = tsv.GetComponent<RectTransform>();
-            tsvRt.SetParent(vf.transform, false);
-            tsvRt.anchorMin = Vector2.zero;
-            tsvRt.anchorMax = Vector2.one;
-            tsvRt.sizeDelta = new Vector2(-40, -40);
-            //tsvRt.sizeDelta = vf.GetComponent<RectTransform>().sizeDelta;
-            var tsvSr = tsv.GetComponent<ScrollRect>();
-            tsvSr.horizontal = false;
+            //vf.AddComponent<Mask>();
+
+            //var tsv = new GameObject("TestScrollView", typeof(ScrollRect));
+            //var tsvRt = tsv.GetComponent<RectTransform>();
+            //tsvRt.SetParent(vf.transform, false);
+            //tsvRt.anchorMin = Vector2.zero;
+            //tsvRt.anchorMax = Vector2.one;
+            //tsvRt.sizeDelta = new Vector2(-40, -40);
+            ////tsvRt.sizeDelta = vf.GetComponent<RectTransform>().sizeDelta;
+            //var tsvSr = tsv.GetComponent<ScrollRect>();
+            //tsvSr.horizontal = false;
 
 
-            var tv = new GameObject("TestViewport", typeof(Image), typeof(Mask));
-            var tvRt = tv.GetComponent<RectTransform>();
-            tvRt.SetParent(tsvRt, false);
-            //tvRt.sizeDelta = tsvRt.sizeDelta;
-            //tvRt.sizeDelta = new Vector2(-80, -80);
-            tvRt.anchorMin = Vector2.zero;
-            tvRt.anchorMax = Vector2.one;
-            //tvRt.anchoredPosition = new Vector2(0, 0.5f);
-            //tvRt.pivot = new Vector2(0, 0.5f);
-            var tvI = tv.GetComponent<Image>();
-            var tvM = tv.GetComponent<Mask>();
-            tvI.color = Color.red;
-            //tvM.showMaskGraphic = false;
+            //var tv = new GameObject("TestViewport", typeof(Image), typeof(Mask));
+            //var tvRt = tv.GetComponent<RectTransform>();
+            //tvRt.SetParent(tsvRt, false);
+            ////tvRt.sizeDelta = tsvRt.sizeDelta;
+            ////tvRt.sizeDelta = new Vector2(-80, -80);
+            //tvRt.anchorMin = Vector2.zero;
+            //tvRt.anchorMax = Vector2.one;
+            ////tvRt.anchoredPosition = new Vector2(0, 0.5f);
+            ////tvRt.pivot = new Vector2(0, 0.5f);
+            //var tvI = tv.GetComponent<Image>();
+            //var tvM = tv.GetComponent<Mask>();
+            //tvI.color = Color.red;
+            ////tvM.showMaskGraphic = false;
 
-            var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup));
-            var tcRt = tc.GetComponent<RectTransform>();
-            tcRt.SetParent(tvRt, false);
-            tcRt.anchoredPosition = new Vector2(0, 1);
-            //tcRt.anchorMin = new Vector2(0, 1);
-            tcRt.anchorMin = new Vector2(0, 0);
-            tcRt.anchorMax = new Vector2(0, 1);
-            tcRt.pivot = new Vector2(0, 1);
-            var tcCsf = tc.GetComponent<ContentSizeFitter>();
-            var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
-            tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            tcVlg.spacing = 5;
-            tcVlg.childControlWidth = false;
-            tcVlg.childControlHeight = false;
-            tcVlg.childForceExpandWidth = false;
-            tcVlg.childForceExpandHeight = false;
-            tcVlg.childAlignment = TextAnchor.UpperLeft;
+            //var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup));
+            //var tcRt = tc.GetComponent<RectTransform>();
+            //tcRt.SetParent(tvRt, false);
+            //tcRt.anchoredPosition = new Vector2(0, 1);
+            ////tcRt.anchorMin = new Vector2(0, 1);
+            //tcRt.anchorMin = new Vector2(0, 0);
+            //tcRt.anchorMax = new Vector2(0, 1);
+            //tcRt.pivot = new Vector2(0, 1);
+            //var tcCsf = tc.GetComponent<ContentSizeFitter>();
+            //var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
+            //tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            //tcVlg.spacing = 5;
+            //tcVlg.childControlWidth = false;
+            //tcVlg.childControlHeight = false;
+            //tcVlg.childForceExpandWidth = false;
+            //tcVlg.childForceExpandHeight = false;
+            //tcVlg.childAlignment = TextAnchor.UpperLeft;
 
-            tsvSr.viewport = tvRt;
-            tsvSr.content = tcRt;
+            //tsvSr.viewport = tvRt;
+            //tsvSr.content = tcRt;
 
-            for (var i = 0; i < 20; i++)
-            {
-                var b = new GameObject($"block-{i}", typeof(Image));
-                var bRt = b.GetComponent<RectTransform>();
-                var bI = b.GetComponent<Image>();
-                bI.color = i == 0 ? Color.green : Color.blue;
-                bRt.sizeDelta = new Vector2(600, 600);
-                bRt.SetParent(tsvSr.content);
-            }
+            //for (var i = 0; i < 20; i++)
+            //{
+            //    var b = new GameObject($"block-{i}", typeof(Image));
+            //    var bRt = b.GetComponent<RectTransform>();
+            //    var bI = b.GetComponent<Image>();
+            //    bI.color = i == 0 ? Color.green : Color.blue;
+            //    bRt.sizeDelta = new Vector2(600, 600);
+            //    bRt.SetParent(tsvSr.content);
+            //}
 
-            var level = 0;
-            //debugText = Dump(tv.transform, ref level);
+            //var level = 0;
+            ////debugText = Dump(tv.transform, ref level);
         }
 
         private void IndexResources()
@@ -311,8 +322,8 @@ namespace UITest
                 // FIXME: use utility
                 var parent = GameObject.Find("/UIRoot").transform;
 
-                if (frame.Created)
-                    frame.Destroy();
+                if (canvas.Created)
+                    canvas.Destroy();
                 else
                 {
                     canvas.SetParent(parent);
@@ -324,8 +335,9 @@ namespace UITest
 
                     var b1Le = b1.AddComponent<LayoutElement>();
                     b1Le.preferredWidth = 200;
+                    b1Le.preferredHeight = 200;
 
-                    b1I.color = Color.red;
+                    b1I.color = Color.green;
 
 
                     var b2 = new GameObject($"TestBlock-2", typeof(Image));
@@ -335,6 +347,7 @@ namespace UITest
 
                     var b2Le = b2.AddComponent<LayoutElement>();
                     b2Le.flexibleWidth = 1;
+                    b2Le.flexibleHeight = 1;
 
                     b1Rt.SetParent(frame.RectTransform, false);
                     b2Rt.SetParent(frame.RectTransform, false);

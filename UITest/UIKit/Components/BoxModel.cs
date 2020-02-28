@@ -18,11 +18,11 @@ namespace UIKit.Components
                 switch (direction)
                 {
                     case Direction.Horizontal:
-                        if (layoutGroup is VerticalLayoutGroup) Destroy(layoutGroup);
+                        if (layoutGroup is VerticalLayoutGroup) DestroyImmediate(layoutGroup);
                         layoutGroup = Get<HorizontalLayoutGroup>();
                         break;
                     case Direction.Vertical:
-                        if (layoutGroup is HorizontalLayoutGroup) Destroy(layoutGroup);
+                        if (layoutGroup is HorizontalLayoutGroup) DestroyImmediate(layoutGroup);
                         layoutGroup = Get<VerticalLayoutGroup>();
                         break;
                 }
@@ -39,6 +39,8 @@ namespace UIKit.Components
             direction = args.Direction;
             LayoutGroup.padding = args.RectOffset;
             LayoutGroup.childAlignment = args.ChildrenAlignment;
+            LayoutGroup.childForceExpandWidth = false;
+            LayoutGroup.childForceExpandHeight = false;
         }
 
         public enum Direction { Horizontal, Vertical }

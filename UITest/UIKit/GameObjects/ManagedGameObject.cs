@@ -18,8 +18,8 @@ namespace UIKit.GameObjects
         }
 
         // TODO: change to mixin???
-        protected T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
-        protected Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
+        public T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
+        public Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
 
         public bool Created => !Destroyed;
         public bool Destroyed => !managedObject;
