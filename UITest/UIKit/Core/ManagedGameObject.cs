@@ -68,15 +68,15 @@ namespace UIKit.Core
                 component.Apply(componentPair.Value);
             }
 
-            foreach (var child in Children)
-            {
-                child.SetParent(this);
-            }
+            foreach (var child in Children) child.SetParent(this);
         }
 
-        public virtual void Destroy()
+        public virtual void Destroy(bool destroyChild = true)
         {
             if (!gameObject) return;
+
+            if (!destroyChild) gameObject.transform.DetachChildren();
+
             UnityEngine.Object.Destroy(gameObject);
             gameObject = null;
         }

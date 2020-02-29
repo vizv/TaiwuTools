@@ -6,7 +6,6 @@ using AssetsReader;
 using System.IO;
 using System.Collections;
 using System;
-using UnityEngine.UI;
 using UIKit.GameObjects;
 using UIKit.Components;
 using UIKit.Core;
@@ -41,7 +40,7 @@ namespace UITest
                 Name = "VizCanvas",
                 Box =
                 {
-                    Padding = { 30 }
+                    Padding = { 80 },
                 },
                 Children =
                 {
@@ -51,9 +50,7 @@ namespace UITest
                         Box = (boxModelArgs = new BoxModel.ComponentAttributes()
                         {
                             Direction = Direction.Horizontal,
-                            Padding = { 0, 50, 100, 200 },
-                            ChildrenAlignment = TextAnchor.UpperRight,
-                            PreferredSize = { 0, 400 },
+                            Padding = { 60 },
                         }),
                         BackgroundImage = cimage,
                         Children =
@@ -61,7 +58,7 @@ namespace UITest
                             new Container()
                             {
                                 Name = "TestBlock-1",
-                                Box = { PreferredSize = { 200 } },
+                                Box = { PreferredSize = { 500, 0 } },
                                 BackgroundColor = Color.green,
                             },
                             new Container()
@@ -77,6 +74,8 @@ namespace UITest
 
         private void Debug()
         {
+            return;
+
             boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
                 ? Direction.Vertical
                 : Direction.Horizontal;
@@ -193,12 +192,16 @@ namespace UITest
             StartCoroutine(LoadResource());
         }
 
-        private int DebugCount(Transform tf)
+        private int DebugCount(GameObject go, HashSet<GameObject> set = null)
         {
+            if (set == null) set = new HashSet<GameObject>();
+            if (set.Contains(go)) return 0;
+            set.Add(go);
+
             var count = 1;
-            for (var i = 0; i < tf.childCount; i++)
+            for (var i = 0; i < go.transform.childCount; i++)
             {
-                count += DebugCount(tf.GetChild(i));
+                count += DebugCount(go.transform.GetChild(i).gameObject, set);
             }
             return count;
         }
@@ -253,7 +256,8 @@ namespace UITest
             }
 
             var uiRoot = GameObject.Find("/UIRoot");
-            var goCount = DebugCount(uiRoot.transform);
+            var goCount = DebugCount(uiRoot);
+            var allGoCount = FindObjectsOfType<GameObject>().Count();
 
             var resourceStatsOutput = resourceStats == null ? "" : string.Join("", resourceStats.OrderBy(pair => pair.Key.FullName).Select(pair => $"\n{pair.Key.FullName}: {pair.Value}"));
 
@@ -262,7 +266,7 @@ namespace UITest
             GUILayout.Label(indexingMessage + resourceStatsOutput, valueStyle);
             GUILayout.Label("鼠标位置：");
             GUILayout.Label($"({mousePosition.x:0.0},{mousePosition.y:0.0})", valueStyle); // FIXME: use format helper for vec3
-            GUILayout.Label($"当前 GameObjects 总数：{goCount}");
+            GUILayout.Label($"当前 GameObjects 总数：UIRoot 中 {goCount} 个 / 总共 {allGoCount} 个");
             GUILayout.Label($"当前鼠标下的 GameObjects (共 {level} 层)：");
             GUILayout.Label(resultOutput, valueStyle);
             GUILayout.Label("调试输出：");
