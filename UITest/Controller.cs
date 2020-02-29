@@ -24,9 +24,9 @@ namespace UITest
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
 
-        private ManagedGameObject canvas;
-        private ManagedGameObject container;
-        private ManagedGameObject frame;
+        private OverlayCanvas canvas;
+        private Container container;
+        private Frame frame;
 
         private BoxModel.Arguments boxModelArgs;
 
@@ -56,6 +56,7 @@ namespace UITest
                 Direction = BoxModel.Direction.Horizontal,
                 Padding = { 0, 50, 100, 200 },
                 ChildrenAlignment = TextAnchor.UpperRight,
+                PreferredSize = { 0, 400 },
             };
 
             frame = new Frame()
@@ -63,17 +64,12 @@ namespace UITest
                 Default =
                 {
                     Name = "VizFrame",
-                    Margin = 30,
-                    Height = 600,
-                    Components =
-                    {
-                        {
-                            typeof(BoxModel),
-                            boxModelArgs
-                        },
-                    },
+                    BoxModel = boxModelArgs,
                 },
             };
+
+            var le = frame.BoxModel.LayoutElement;
+            debugText = $"{le.preferredWidth} / {le.preferredHeight}";
         }
 
         private void Debug()

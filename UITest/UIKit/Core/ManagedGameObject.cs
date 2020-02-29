@@ -39,6 +39,7 @@ namespace UIKit.Core
         public virtual void Create()
         {
             if (managedObject) return;
+            if (Default.Name == null) Default.Name = $"Unnammed UIKit GameObject <{GetType().FullName}>";
             managedObject = new GameObject(Default.Name);
             managedObject.SetActive(Default.Active);
 
@@ -60,7 +61,7 @@ namespace UIKit.Core
 
         public class Arguments : Attributes
         {
-            public string Name = "UntitledUIKitGameObject";
+            public string Name = null;
             public bool Active = true;
 
             public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
