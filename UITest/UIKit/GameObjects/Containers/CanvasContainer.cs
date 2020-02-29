@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UIKit.GameObjects
+namespace UIKit.GameObjects.Containers
 {
-    public class Overlay : Container
+    public class CanvasContainer : Container
     {
         public Canvas Canvas => Get<Canvas>();
 

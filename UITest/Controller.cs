@@ -9,6 +9,7 @@ using System;
 using UIKit.GameObjects;
 using UIKit.Components;
 using UIKit.Core;
+using UIKit.GameObjects.Containers;
 
 namespace UITest
 {
@@ -23,7 +24,7 @@ namespace UITest
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
 
-        private Overlay overlay;
+        private CanvasContainer overlay;
         private Container frame;
 
         private BoxModel.ComponentAttributes boxModelArgs;
@@ -35,7 +36,7 @@ namespace UITest
             var cimage = dialog.GetComponent<CImage>();
 
 
-            overlay = new Overlay()
+            overlay = new CanvasContainer()
             {
                 Name = "VizCanvas",
                 Box =

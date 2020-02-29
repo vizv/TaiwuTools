@@ -253,7 +253,7 @@
     <Compile Include="UIKit\Core\ComponentAttributes.cs" />
     <Compile Include="UIKit\GameObjects\Container.cs" />
     <Compile Include="UIKit\Core\ManagedGameObject.cs" />
-    <Compile Include="UIKit\GameObjects\Overlay.cs" />
+    <Compile Include="UIKit\GameObjects\Containers\CanvasContainer.cs" />
     <Compile Include="UITest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
