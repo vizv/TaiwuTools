@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UIKit.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,28 +32,28 @@ namespace UIKit.Components
             }
         }
 
-        public override void Apply(ManagedComponent.Arguments arguments)
+        public override void Apply(ManagedComponent.ComponentAttributes componentAttributes)
         {
-            var args = arguments as Arguments;
-            if (!args) return;
+            var attributes = componentAttributes as ComponentAttributes;
+            if (!attributes) return;
 
-            direction = args.Direction;
-            LayoutGroup.padding = args.RectOffset;
-            LayoutGroup.childAlignment = args.ChildrenAlignment;
+            direction = attributes.Direction;
+            LayoutGroup.padding = attributes.RectOffset;
+            LayoutGroup.childAlignment = attributes.ChildrenAlignment;
             LayoutGroup.childForceExpandWidth = false;
             LayoutGroup.childForceExpandHeight = false;
 
-            LayoutElement.minWidth = args.MinimalWidth;
-            LayoutElement.minHeight = args.MinimalHeight;
-            LayoutElement.preferredWidth = args.PreferredWidth;
-            LayoutElement.preferredHeight = args.PreferredHeight;
-            LayoutElement.flexibleWidth = args.FlexibleWidth;
-            LayoutElement.flexibleHeight = args.FlexibleHeight;
+            LayoutElement.minWidth = attributes.MinimalWidth;
+            LayoutElement.minHeight = attributes.MinimalHeight;
+            LayoutElement.preferredWidth = attributes.PreferredWidth;
+            LayoutElement.preferredHeight = attributes.PreferredHeight;
+            LayoutElement.flexibleWidth = attributes.FlexibleWidth;
+            LayoutElement.flexibleHeight = attributes.FlexibleHeight;
         }
 
         public enum Direction { Horizontal, Vertical }
 
-        public new class Arguments : ManagedComponent.Arguments
+        public new class ComponentAttributes : ManagedComponent.ComponentAttributes
         {
             public Direction Direction = Direction.Vertical;
             public TextAnchor ChildrenAlignment = TextAnchor.MiddleCenter;
@@ -84,22 +82,22 @@ namespace UIKit.Components
                         right = top;
                         bottom = top;
                         left = top;
+                    }
 
-                        if (Padding.Count > 1)
-                        {
-                            right = Padding[1];
-                            left = right;
+                    if (Padding.Count > 1)
+                    {
+                        right = Padding[1];
+                        left = right;
+                    }
 
-                            if (Padding.Count > 2)
-                            {
-                                bottom = Padding[2];
+                    if (Padding.Count > 2)
+                    {
+                        bottom = Padding[2];
+                    }
 
-                                if (Padding.Count > 3)
-                                {
-                                    left = Padding[3];
-                                }
-                            }
-                        }
+                    if (Padding.Count > 3)
+                    {
+                        left = Padding[3];
                     }
 
                     return new RectOffset(left, right, top, bottom);

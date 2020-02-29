@@ -23,7 +23,7 @@ namespace UIKit.Core
         }
 
         // FIXME: Add SerializableField Tag
-        public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
+        public Dictionary<Type, ManagedComponent.ComponentAttributes> Components = new Dictionary<Type, ManagedComponent.ComponentAttributes>();
 
         // FIXME: Add SerializableField Tag
         public List<ManagedGameObject> Children = new List<ManagedGameObject>();

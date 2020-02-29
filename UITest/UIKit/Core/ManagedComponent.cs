@@ -10,11 +10,8 @@ namespace UIKit.Core
         public T Get<T>() where T : Component => GameObject.GetComponent<T>() ?? GameObject.AddComponent<T>();
         public Component Get(Type type) => GameObject.GetComponent(type) ?? GameObject.AddComponent(type);
 
-        public virtual void Apply(Arguments arguments)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual void Apply(ComponentAttributes componentAttributes) { }
 
-        public abstract class Arguments : ComponentArguments { }
+        public abstract class ComponentAttributes : Core.ComponentAttributes { }
     }
 }

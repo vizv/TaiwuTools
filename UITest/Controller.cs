@@ -27,7 +27,7 @@ namespace UITest
         private Overlay overlay;
         private Container frame;
 
-        private BoxModel.Arguments boxModelArgs;
+        private BoxModel.ComponentAttributes boxModelArgs;
 
         protected void Awake()
         {
@@ -48,7 +48,7 @@ namespace UITest
                     (frame = new Container()
                     {
                         Name = "VizFrame",
-                        Box = (boxModelArgs = new BoxModel.Arguments()
+                        Box = (boxModelArgs = new BoxModel.ComponentAttributes()
                         {
                             Direction = BoxModel.Direction.Horizontal,
                             Padding = { 0, 50, 100, 200 },
