@@ -1,4 +1,5 @@
-﻿using UIKit.Core;
+﻿using UIKit.Components;
+using UIKit.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +13,16 @@ namespace UIKit.GameObjects
         public override void Create()
         {
             base.Create();
-            var canvas = ManagedObject.AddComponent<Canvas>();
-            ManagedObject.AddComponent<GraphicRaycaster>();
+
+            Get<GraphicRaycaster>();
+
+            var canvas = Get<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            var boxModel = Get<BoxModel>();
+            boxModel.Apply(new BoxModel.Arguments());
+            boxModel.LayoutGroup.childForceExpandHeight = true;
+            boxModel.LayoutGroup.childForceExpandWidth = true;
         }
     }
 }

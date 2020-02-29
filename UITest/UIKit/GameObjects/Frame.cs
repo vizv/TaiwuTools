@@ -19,20 +19,20 @@ namespace UIKit.GameObjects
             //ManagedObject.AddComponent<Image>();
 
             // FIXME: use Layout Helper
-            var pivot = new Vector2(0.5f, 0.5f);
-            var anchorMin = pivot;
-            var anchorMax = pivot;
-            var sizeDelta = new Vector2(Default.Width, Default.Height);
-            var anchorPosition = (pivot - new Vector2(0.5f, 0.5f)) * 2 * -Default.Margin;
+            //var pivot = new Vector2(0.5f, 0.5f);
+            //var anchorMin = pivot;
+            //var anchorMax = pivot;
+            //var sizeDelta = new Vector2(Default.Width, Default.Height);
+            //var anchorPosition = (pivot - new Vector2(0.5f, 0.5f)) * 2 * -Default.Margin;
 
-            if (Default.Width == 0) (anchorMin.x, anchorMax.x, sizeDelta.x) = (0, 1, -Default.Margin * 2);
-            if (Default.Height == 0) (anchorMin.y, anchorMax.y, sizeDelta.y) = (0, 1, -Default.Margin * 2);
+            //if (Default.Width == 0) (anchorMin.x, anchorMax.x, sizeDelta.x) = (0, 1, -Default.Margin * 2);
+            //if (Default.Height == 0) (anchorMin.y, anchorMax.y, sizeDelta.y) = (0, 1, -Default.Margin * 2);
 
-            RectTransform.pivot = pivot;
-            RectTransform.anchorMin = anchorMin;
-            RectTransform.anchorMax = anchorMax;
-            RectTransform.sizeDelta = sizeDelta;
-            RectTransform.anchoredPosition = anchorPosition;
+            //RectTransform.pivot = pivot;
+            //RectTransform.anchorMin = anchorMin;
+            //RectTransform.anchorMax = anchorMax;
+            //RectTransform.sizeDelta = sizeDelta;
+            //RectTransform.anchoredPosition = anchorPosition;
 
             //UITest.Main.Logger.Log($"{RectTransform.rect}@{RectTransform.position}");
 

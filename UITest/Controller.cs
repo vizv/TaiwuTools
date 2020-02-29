@@ -25,6 +25,7 @@ namespace UITest
         private Dictionary<Type, int> resourceStats;
 
         private ManagedGameObject canvas;
+        private ManagedGameObject container;
         private ManagedGameObject frame;
 
         private BoxModel.Arguments boxModelArgs;
@@ -36,6 +37,17 @@ namespace UITest
                 Default =
                 {
                     Name = "VizCanvas",
+                }
+            };
+
+            container = new Container()
+            {
+                Default =
+                {
+                    Name = "VizContainer",
+                    BoxModel = new BoxModel.Arguments() {
+                        Padding = { 30 }
+                    }
                 }
             };
 
@@ -328,7 +340,8 @@ namespace UITest
                 else
                 {
                     canvas.SetParent(parent);
-                    frame.SetParent(canvas);
+                    container.SetParent(canvas);
+                    frame.SetParent(container);
 
                     var b1 = new GameObject($"TestBlock-1", typeof(Image));
                     var b1Rt = b1.GetComponent<RectTransform>();
