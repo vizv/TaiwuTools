@@ -1,14 +1,14 @@
 ﻿using UIKit.Components;
 using UIKit.Core;
+using UIKit.Core.GameObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UIKit.GameObjects
 {
-    public class OverlayCanvas : ManagedGameObject
+    public class OverlayCanvas : BoxModelGameObject
     {
-        public OverlayCanvas() : this(new Arguments()) { }
-        public OverlayCanvas(Arguments arguments) : base(arguments) { }
+        public Canvas Canvas => Get<Canvas>();
 
         public override void Create()
         {
@@ -16,13 +16,10 @@ namespace UIKit.GameObjects
 
             Get<GraphicRaycaster>();
 
-            var canvas = Get<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-            var boxModel = Get<BoxModel>();
-            boxModel.Apply(new BoxModel.Arguments());
-            boxModel.LayoutGroup.childForceExpandHeight = true;
-            boxModel.LayoutGroup.childForceExpandWidth = true;
+            LayoutGroup.childForceExpandHeight = true;
+            LayoutGroup.childForceExpandWidth = true;
         }
     }
 }

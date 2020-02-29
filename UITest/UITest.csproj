@@ -246,6 +246,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="UIKit\Components\BoxModel.cs" />
+    <Compile Include="UIKit\Core\GameObjects\BoxModelGameObject.cs" />
     <Compile Include="UIKit\Core\ManagedComponent.cs" />
     <Compile Include="UIKit\Core\Attributes.cs" />
     <Compile Include="UIKit\Core\ManagedObject.cs" />
