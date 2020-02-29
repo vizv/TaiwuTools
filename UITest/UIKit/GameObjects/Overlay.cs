@@ -7,9 +7,9 @@ namespace UIKit.GameObjects
     {
         public Canvas Canvas => Get<Canvas>();
 
-        public override void Create()
+        public override void Create(bool active = true)
         {
-            base.Create();
+            base.Create(active);
 
             Get<GraphicRaycaster>();
 

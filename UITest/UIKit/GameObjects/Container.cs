@@ -6,35 +6,30 @@ namespace UIKit.GameObjects
 {
     public class Container : BoxModelGameObject
     {
+        // FIXME: Add SerializableField Tag
+        public Image BackgroundImage = null;
+        // FIXME: Add SerializableField Tag
+        public Color? BackgroundColor = null;
+
         public Image Background => Get<Image>();
 
-        public new Arguments Default;
-        public Container() : this(new Arguments()) { }
-        public Container(Arguments arguments) : base(arguments) => Default = arguments;
-
-        public override void Create()
+        public override void Create(bool active = true)
         {
-            base.Create();
+            base.Create(active);
 
-            if (Default.BackgroundImage)
+            if (BackgroundImage)
             {
-                var image = Default.BackgroundImage;
+                var image = BackgroundImage;
 
                 Background.type = image.type;
                 Background.sprite = image.sprite;
                 Background.color = image.color;
             }
 
-            if (Default.BackgroundColor.HasValue)
+            if (BackgroundColor.HasValue)
             {
-                Background.color = Default.BackgroundColor.Value;
+                Background.color = BackgroundColor.Value;
             }
-        }
-
-        public new class Arguments : BoxModelGameObject.Arguments
-        {
-            public Image BackgroundImage = null;
-            public Color? BackgroundColor = null;
         }
     }
 }

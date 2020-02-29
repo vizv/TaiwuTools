@@ -4,8 +4,30 @@ using UnityEngine;
 
 namespace UIKit.Core
 {
-    public abstract class ManagedGameObject : ManagedObject<GameObject>
+    public abstract class ManagedGameObject
     {
+        // internal GameObject name
+        private string name = null;
+        // FIXME: Add SerializableField Tag
+        public string Name
+        {
+            set
+            {
+                name = value;
+                if (managedObject) managedObject.name = name;
+            }
+            get
+            {
+                if (name == null) name = $"Unnammed UIKit GameObject <{GetType().FullName}>";
+                return name;
+            }
+        }
+
+        // FIXME: Add SerializableField Tag
+        public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
+
+        // internal GameObject FIXME: rename
+        private GameObject managedObject;
         public GameObject ManagedObject
         {
             get
@@ -23,10 +45,6 @@ namespace UIKit.Core
         public bool Destroyed => !managedObject;
         public bool IsActive => ManagedObject.activeSelf;
         public RectTransform RectTransform => Get<RectTransform>();
-        public string Name => ManagedObject.name;
-
-        public Arguments Default;
-        protected ManagedGameObject(Arguments arguments) => Default = arguments;
 
         public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.ManagedObject, worldPositionStays);
         public void SetParent(GameObject gameObject, bool worldPositionStays = false) => SetParent(gameObject.transform, worldPositionStays);
@@ -36,14 +54,13 @@ namespace UIKit.Core
 
         public T AddComponent<T>() where T : Component => ManagedObject.AddComponent<T>();
 
-        public virtual void Create()
+        public virtual void Create(bool active = true)
         {
             if (managedObject) return;
-            if (Default.Name == null) Default.Name = $"Unnammed UIKit GameObject <{GetType().FullName}>";
-            managedObject = new GameObject(Default.Name);
-            managedObject.SetActive(Default.Active);
+            managedObject = new GameObject(name);
+            managedObject.SetActive(active);
 
-            foreach (var componentPair in Default.Components)
+            foreach (var componentPair in Components)
             {
                 var component = ManagedObject.AddComponent(componentPair.Key) as ManagedComponent;
                 if (!component) continue;
@@ -57,14 +74,6 @@ namespace UIKit.Core
             if (!managedObject) return;
             UnityEngine.Object.Destroy(managedObject);
             managedObject = null;
-        }
-
-        public class Arguments : Attributes
-        {
-            public string Name = null;
-            public bool Active = true;
-
-            public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
         }
     }
 }

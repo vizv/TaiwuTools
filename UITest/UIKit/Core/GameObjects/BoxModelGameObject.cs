@@ -5,23 +5,17 @@ namespace UIKit.Core.GameObjects
 {
     public class BoxModelGameObject : ManagedGameObject
     {
+        // FIXME: Add SerializableField Tag
+        public BoxModel.Arguments Box = new BoxModel.Arguments();
+
         public BoxModel BoxModel => Get<BoxModel>();
         public HorizontalOrVerticalLayoutGroup LayoutGroup => BoxModel.LayoutGroup;
 
-        public new Arguments Default;
-        public BoxModelGameObject() : this(new Arguments()) { }
-        public BoxModelGameObject(Arguments arguments) : base(arguments) => Default = arguments;
-
-        public override void Create()
+        public override void Create(bool active = true)
         {
-            base.Create();
+            base.Create(active);
 
-            BoxModel.Apply(Default.BoxModel);
-        }
-
-        public new class Arguments : ManagedGameObject.Arguments
-        {
-            public BoxModel.Arguments BoxModel = new BoxModel.Arguments();
+            BoxModel.Apply(Box);
         }
     }
 }

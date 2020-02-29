@@ -249,7 +249,6 @@
     <Compile Include="UIKit\Core\GameObjects\BoxModelGameObject.cs" />
     <Compile Include="UIKit\Core\ManagedComponent.cs" />
     <Compile Include="UIKit\Core\Attributes.cs" />
-    <Compile Include="UIKit\Core\ManagedObject.cs" />
     <Compile Include="UIKit\GameObjects\Container.cs" />
     <Compile Include="UIKit\Core\ManagedGameObject.cs" />
     <Compile Include="UIKit\GameObjects\Overlay.cs" />

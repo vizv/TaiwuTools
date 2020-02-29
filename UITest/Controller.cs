@@ -33,14 +33,11 @@ namespace UITest
         {
             canvas = new Overlay()
             {
-                Default =
+                Name = "VizCanvas",
+                Box =
                 {
-                    Name = "VizCanvas",
-                    BoxModel =
-                    {
-                        Padding = { 30 }
-                    }
-                }
+                    Padding = { 30 }
+                },
             };
 
             boxModelArgs = new BoxModel.Arguments()
@@ -55,12 +52,9 @@ namespace UITest
             var cimage = dialog.GetComponent<CImage>();
             frame = new Container()
             {
-                Default =
-                {
-                    Name = "VizFrame",
-                    BoxModel = boxModelArgs,
-                    BackgroundImage = cimage,
-                },
+                Name = "VizFrame",
+                Box = boxModelArgs,
+                BackgroundImage = cimage,
             };
 
             var le = frame.BoxModel.LayoutElement;
@@ -334,23 +328,17 @@ namespace UITest
 
                     var tb1 = new Container()
                     {
-                        Default =
+                        Name = "TestBlock-1",
+                        Box =
                         {
-                            Name = "TestBlock-1",
-                            BoxModel =
-                            {
-                                PreferredSize = { 200 },
-                            },
-                            BackgroundColor = Color.green,
-                        }
+                            PreferredSize = { 200 },
+                        },
+                        BackgroundColor = Color.green,
                     };
                     var tb2 = new Container()
                     {
-                        Default =
-                        {
-                            Name = "TestBlock-1",
-                            BackgroundColor = Color.blue,
-                        }
+                        Name = "TestBlock-1",
+                        BackgroundColor = Color.blue,
                     };
                     tb1.SetParent(frame);
                     tb2.SetParent(frame);
