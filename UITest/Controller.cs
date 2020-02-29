@@ -59,12 +59,15 @@ namespace UITest
                 PreferredSize = { 0, 400 },
             };
 
+            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
+            var cimage = dialog.GetComponent<CImage>();
             frame = new Frame()
             {
                 Default =
                 {
                     Name = "VizFrame",
                     BoxModel = boxModelArgs,
+                    Background = cimage,
                 },
             };
 

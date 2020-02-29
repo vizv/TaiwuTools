@@ -6,18 +6,29 @@ namespace UIKit.GameObjects
 {
     public class Frame : BoxModelGameObject
     {
-        public Image BackgroundImage => Get<Image>();
+        public Image Background => Get<Image>();
+
+        public new Arguments Default;
+        public Frame() : this(new Arguments()) { }
+        public Frame(Arguments arguments) : base(arguments) => Default = arguments;
 
         public override void Create()
         {
             base.Create();
 
-            // FIXME: use utility
-            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
-            var cimage = dialog.GetComponent<CImage>();
-            BackgroundImage.type = cimage.type;
-            BackgroundImage.sprite = cimage.sprite;
-            BackgroundImage.color = cimage.color;
+            if (Default.Background)
+            {
+                var image = Default.Background;
+
+                Background.type = image.type;
+                Background.sprite = image.sprite;
+                Background.color = image.color;
+            }
+        }
+
+        public new class Arguments : BoxModelGameObject.Arguments
+        {
+            public Image Background = null;
         }
     }
 }
