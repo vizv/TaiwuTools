@@ -7,7 +7,8 @@ namespace UIKit.Components
 {
     public class BoxModel : ManagedComponent
     {
-        private Direction direction;
+        // FIXME: Add SerializableField Tag
+        private Direction Direction;
 
         public LayoutElement LayoutElement => Get<LayoutElement>();
         public HorizontalOrVerticalLayoutGroup LayoutGroup {
@@ -16,7 +17,7 @@ namespace UIKit.Components
                 var layoutGroup = (HorizontalOrVerticalLayoutGroup)GameObject.GetComponent<HorizontalLayoutGroup>()
                     ?? GameObject.GetComponent<VerticalLayoutGroup>();
 
-                switch (direction)
+                switch (Direction)
                 {
                     case Direction.Horizontal:
                         if (layoutGroup is VerticalLayoutGroup) DestroyImmediate(layoutGroup);
@@ -37,7 +38,7 @@ namespace UIKit.Components
             var attributes = componentAttributes as ComponentAttributes;
             if (!attributes) return;
 
-            direction = attributes.Direction;
+            Direction = attributes.Direction;
             LayoutGroup.padding = attributes.RectOffset;
             LayoutGroup.childAlignment = attributes.ChildrenAlignment;
             LayoutGroup.childForceExpandWidth = false;
@@ -50,8 +51,6 @@ namespace UIKit.Components
             LayoutElement.flexibleWidth = attributes.FlexibleWidth;
             LayoutElement.flexibleHeight = attributes.FlexibleHeight;
         }
-
-        public enum Direction { Horizontal, Vertical }
 
         public new class ComponentAttributes : ManagedComponent.ComponentAttributes
         {

@@ -50,7 +50,7 @@ namespace UITest
                         Name = "VizFrame",
                         Box = (boxModelArgs = new BoxModel.ComponentAttributes()
                         {
-                            Direction = BoxModel.Direction.Horizontal,
+                            Direction = Direction.Horizontal,
                             Padding = { 0, 50, 100, 200 },
                             ChildrenAlignment = TextAnchor.UpperRight,
                             PreferredSize = { 0, 400 },
@@ -77,9 +77,9 @@ namespace UITest
 
         private void Debug()
         {
-            boxModelArgs.Direction = boxModelArgs.Direction == BoxModel.Direction.Horizontal
-                ? BoxModel.Direction.Vertical
-                : BoxModel.Direction.Horizontal;
+            boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
+                ? Direction.Vertical
+                : Direction.Horizontal;
             frame.BoxModel.Apply(boxModelArgs);
 
             //var vf = GameObject.Find("VizFrame");
