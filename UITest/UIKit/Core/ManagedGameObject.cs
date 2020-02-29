@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace UIKit.Core
 {
-    public abstract class ManagedGameObject
+    public abstract class ManagedGameObject : IManagedObject
     {
-        // internal GameObject name
-        private string name = null;
         // FIXME: Add SerializableField Tag
+        private string name = null;
         public string Name
         {
             set
@@ -29,7 +28,7 @@ namespace UIKit.Core
         // FIXME: Add SerializableField Tag
         public List<ManagedGameObject> Children = new List<ManagedGameObject>();
 
-        // internal GameObject FIXME: rename
+        // IManagedObject
         private GameObject gameObject;
         public GameObject GameObject
         {
@@ -39,8 +38,6 @@ namespace UIKit.Core
                 return gameObject;
             }
         }
-
-        // TODO: change to mixin???
         public T Get<T>() where T : Component => GameObject.GetComponent<T>() ?? GameObject.AddComponent<T>();
         public Component Get(Type type) => GameObject.GetComponent(type) ?? GameObject.AddComponent(type);
 

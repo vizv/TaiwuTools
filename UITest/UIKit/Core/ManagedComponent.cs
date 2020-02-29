@@ -3,19 +3,18 @@ using UnityEngine;
 
 namespace UIKit.Core
 {
-    public abstract class ManagedComponent : MonoBehaviour
+    public abstract class ManagedComponent : MonoBehaviour, IManagedObject
     {
-        protected GameObject ManagedObject => gameObject;
-
-        // TODO: change to mixin???
-        public T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
-        public Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
+        // IManagedObject
+        public GameObject GameObject => gameObject;
+        public T Get<T>() where T : Component => GameObject.GetComponent<T>() ?? GameObject.AddComponent<T>();
+        public Component Get(Type type) => GameObject.GetComponent(type) ?? GameObject.AddComponent(type);
 
         public virtual void Apply(Arguments arguments)
         {
             throw new NotImplementedException();
         }
 
-        public abstract class Arguments : Attributes { }
+        public abstract class Arguments : ComponentArguments { }
     }
 }

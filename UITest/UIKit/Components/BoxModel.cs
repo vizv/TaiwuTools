@@ -15,8 +15,8 @@ namespace UIKit.Components
         public HorizontalOrVerticalLayoutGroup LayoutGroup {
             get
             {
-                var layoutGroup = (HorizontalOrVerticalLayoutGroup)ManagedObject.GetComponent<HorizontalLayoutGroup>()
-                    ?? ManagedObject.GetComponent<VerticalLayoutGroup>();
+                var layoutGroup = (HorizontalOrVerticalLayoutGroup)GameObject.GetComponent<HorizontalLayoutGroup>()
+                    ?? GameObject.GetComponent<VerticalLayoutGroup>();
 
                 switch (direction)
                 {
