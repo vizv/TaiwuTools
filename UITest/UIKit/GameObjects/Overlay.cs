@@ -1,10 +1,9 @@
-﻿using UIKit.Core.GameObjects;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace UIKit.GameObjects
 {
-    public class OverlayCanvas : BoxModelGameObject
+    public class Overlay : Container
     {
         public Canvas Canvas => Get<Canvas>();
 
@@ -15,9 +14,6 @@ namespace UIKit.GameObjects
             Get<GraphicRaycaster>();
 
             Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
-            LayoutGroup.childForceExpandHeight = true;
-            LayoutGroup.childForceExpandWidth = true;
         }
     }
 }

@@ -24,28 +24,20 @@ namespace UITest
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
 
-        private OverlayCanvas canvas;
-        private Container container;
-        private Frame frame;
+        private Overlay canvas;
+        private Container frame;
 
         private BoxModel.Arguments boxModelArgs;
 
         protected void Awake()
         {
-            canvas = new OverlayCanvas()
+            canvas = new Overlay()
             {
                 Default =
                 {
                     Name = "VizCanvas",
-                }
-            };
-
-            container = new Container()
-            {
-                Default =
-                {
-                    Name = "VizContainer",
-                    BoxModel = new BoxModel.Arguments() {
+                    BoxModel =
+                    {
                         Padding = { 30 }
                     }
                 }
@@ -61,13 +53,13 @@ namespace UITest
 
             var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
             var cimage = dialog.GetComponent<CImage>();
-            frame = new Frame()
+            frame = new Container()
             {
                 Default =
                 {
                     Name = "VizFrame",
                     BoxModel = boxModelArgs,
-                    Background = cimage,
+                    BackgroundImage = cimage,
                 },
             };
 
@@ -80,8 +72,7 @@ namespace UITest
             boxModelArgs.Direction = boxModelArgs.Direction == BoxModel.Direction.Horizontal
                 ? BoxModel.Direction.Vertical
                 : BoxModel.Direction.Horizontal;
-            var boxModel = frame.Get<BoxModel>();
-            boxModel.Apply(boxModelArgs);
+            frame.BoxModel.Apply(boxModelArgs);
 
             //var vf = GameObject.Find("VizFrame");
             //if (!vf) return;
@@ -339,54 +330,30 @@ namespace UITest
                 else
                 {
                     canvas.SetParent(parent);
-                    container.SetParent(canvas);
-                    frame.SetParent(container);
+                    frame.SetParent(canvas);
 
-                    var b1 = new GameObject($"TestBlock-1", typeof(Image));
-                    var b1Rt = b1.GetComponent<RectTransform>();
-                    var b1I = b1.GetComponent<Image>();
-
-                    var b1Le = b1.AddComponent<LayoutElement>();
-                    b1Le.preferredWidth = 200;
-                    b1Le.preferredHeight = 200;
-
-                    b1I.color = Color.green;
-
-
-                    var b2 = new GameObject($"TestBlock-2", typeof(Image));
-                    var b2Rt = b2.GetComponent<RectTransform>();
-                    var b2I = b2.GetComponent<Image>();
-                    b2I.color = Color.blue;
-
-                    var b2Le = b2.AddComponent<LayoutElement>();
-                    b2Le.flexibleWidth = 1;
-                    b2Le.flexibleHeight = 1;
-
-                    b1Rt.SetParent(frame.RectTransform, false);
-                    b2Rt.SetParent(frame.RectTransform, false);
-                    ////var fGlg = frame.AddComponent<GridLayoutGroup>();
-                    ////fGlg.padding = new RectOffset(50, 50, 50, 50);
-                    ////fGlg.childAlignment = TextAnchor.UpperLeft;
-                    ////var fCsf = frame.AddComponent<ContentSizeFitter>();
-                    ////fCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    ////var fLe = frame.AddComponent<LayoutElement>();
-                    ////fLe.flexibleHeight = 1000;
-
-                    //var b = new GameObject($"TestBlock", typeof(Image));
-                    //var bRt = b.GetComponent<RectTransform>();
-                    //var bI = b.GetComponent<Image>();
-                    //bI.color = Color.red;
-                    //bRt.sizeDelta = new Vector2(600, 600);
-                    //bRt.SetParent(frame.RectTransform, false);
-                    //bRt.fle
-
-                    //var fLe = b.AddComponent<LayoutElement>();
-                    //fLe.flexibleHeight = 1000;
-                    //var nestedFrame = new Frame()
-                    //{
-                    //    Default = { Name = "VizNestedFrame", Margin = 30 }
-                    //};
-                    //nestedFrame.SetParent(frame);
+                    var tb1 = new Container()
+                    {
+                        Default =
+                        {
+                            Name = "TestBlock-1",
+                            BoxModel =
+                            {
+                                PreferredSize = { 200 },
+                            },
+                            BackgroundColor = Color.green,
+                        }
+                    };
+                    var tb2 = new Container()
+                    {
+                        Default =
+                        {
+                            Name = "TestBlock-1",
+                            BackgroundColor = Color.blue,
+                        }
+                    };
+                    tb1.SetParent(frame);
+                    tb2.SetParent(frame);
                 }
             }
         }

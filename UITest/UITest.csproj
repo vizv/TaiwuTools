@@ -251,9 +251,8 @@
     <Compile Include="UIKit\Core\Attributes.cs" />
     <Compile Include="UIKit\Core\ManagedObject.cs" />
     <Compile Include="UIKit\GameObjects\Container.cs" />
-    <Compile Include="UIKit\GameObjects\Frame.cs" />
     <Compile Include="UIKit\Core\ManagedGameObject.cs" />
-    <Compile Include="UIKit\GameObjects\OverlayCanvas.cs" />
+    <Compile Include="UIKit\GameObjects\Overlay.cs" />
     <Compile Include="UITest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
