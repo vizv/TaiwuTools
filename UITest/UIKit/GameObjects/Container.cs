@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UIKit.GameObjects
 {
-    public class Container : BoxModelGameObject
+    public partial class Container : BoxModelGameObject
     {
         // FIXME: Add SerializableField Tag
         public Image BackgroundImage = null;

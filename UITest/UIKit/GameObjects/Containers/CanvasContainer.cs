@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UIKit.GameObjects.Containers
+namespace UIKit.GameObjects
 {
-    public class CanvasContainer : Container
+    public partial class Container
     {
-        public Canvas Canvas => Get<Canvas>();
-
-        public override void Create(bool active = true)
+        public class CanvasContainer : Container
         {
-            base.Create(active);
+            public Canvas Canvas => Get<Canvas>();
 
-            Get<GraphicRaycaster>();
+            public override void Create(bool active = true)
+            {
+                base.Create(active);
 
-            Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                Get<GraphicRaycaster>();
+
+                Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            }
         }
     }
 }
