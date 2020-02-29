@@ -24,41 +24,55 @@ namespace UITest
         private Dictionary<string, Type> resourceIndex;
         private Dictionary<Type, int> resourceStats;
 
-        private Overlay canvas;
+        private Overlay overlay;
         private Container frame;
 
         private BoxModel.Arguments boxModelArgs;
 
         protected void Awake()
         {
-            canvas = new Overlay()
+            // FIXME: use a resource loader
+            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
+            var cimage = dialog.GetComponent<CImage>();
+
+
+            overlay = new Overlay()
             {
                 Name = "VizCanvas",
                 Box =
                 {
                     Padding = { 30 }
                 },
+                Children =
+                {
+                    (frame = new Container()
+                    {
+                        Name = "VizFrame",
+                        Box = (boxModelArgs = new BoxModel.Arguments()
+                        {
+                            Direction = BoxModel.Direction.Horizontal,
+                            Padding = { 0, 50, 100, 200 },
+                            ChildrenAlignment = TextAnchor.UpperRight,
+                            PreferredSize = { 0, 400 },
+                        }),
+                        BackgroundImage = cimage,
+                        Children =
+                        {
+                            new Container()
+                            {
+                                Name = "TestBlock-1",
+                                Box = { PreferredSize = { 200 } },
+                                BackgroundColor = Color.green,
+                            },
+                            new Container()
+                            {
+                                Name = "TestBlock-2",
+                                BackgroundColor = Color.blue,
+                            },
+                        }
+                    }),
+                }
             };
-
-            boxModelArgs = new BoxModel.Arguments()
-            {
-                Direction = BoxModel.Direction.Horizontal,
-                Padding = { 0, 50, 100, 200 },
-                ChildrenAlignment = TextAnchor.UpperRight,
-                PreferredSize = { 0, 400 },
-            };
-
-            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
-            var cimage = dialog.GetComponent<CImage>();
-            frame = new Container()
-            {
-                Name = "VizFrame",
-                Box = boxModelArgs,
-                BackgroundImage = cimage,
-            };
-
-            var le = frame.BoxModel.LayoutElement;
-            debugText = $"{le.preferredWidth} / {le.preferredHeight}";
         }
 
         private void Debug()
@@ -319,29 +333,11 @@ namespace UITest
                 // FIXME: use utility
                 var parent = GameObject.Find("/UIRoot").transform;
 
-                if (canvas.Created)
-                    canvas.Destroy();
+                if (overlay.Created)
+                    overlay.Destroy();
                 else
                 {
-                    canvas.SetParent(parent);
-                    frame.SetParent(canvas);
-
-                    var tb1 = new Container()
-                    {
-                        Name = "TestBlock-1",
-                        Box =
-                        {
-                            PreferredSize = { 200 },
-                        },
-                        BackgroundColor = Color.green,
-                    };
-                    var tb2 = new Container()
-                    {
-                        Name = "TestBlock-1",
-                        BackgroundColor = Color.blue,
-                    };
-                    tb1.SetParent(frame);
-                    tb2.SetParent(frame);
+                    overlay.SetParent(parent);
                 }
             }
         }

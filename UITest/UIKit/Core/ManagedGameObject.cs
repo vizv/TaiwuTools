@@ -14,7 +14,7 @@ namespace UIKit.Core
             set
             {
                 name = value;
-                if (managedObject) managedObject.name = name;
+                if (gameObject) gameObject.name = name;
             }
             get
             {
@@ -26,54 +26,62 @@ namespace UIKit.Core
         // FIXME: Add SerializableField Tag
         public Dictionary<Type, ManagedComponent.Arguments> Components = new Dictionary<Type, ManagedComponent.Arguments>();
 
+        // FIXME: Add SerializableField Tag
+        public List<ManagedGameObject> Children = new List<ManagedGameObject>();
+
         // internal GameObject FIXME: rename
-        private GameObject managedObject;
-        public GameObject ManagedObject
+        private GameObject gameObject;
+        public GameObject GameObject
         {
             get
             {
-                if (!managedObject) Create();
-                return managedObject;
+                if (!gameObject) Create();
+                return gameObject;
             }
         }
 
         // TODO: change to mixin???
-        public T Get<T>() where T : Component => ManagedObject.GetComponent<T>() ?? ManagedObject.AddComponent<T>();
-        public Component Get(Type type) => ManagedObject.GetComponent(type) ?? ManagedObject.AddComponent(type);
+        public T Get<T>() where T : Component => GameObject.GetComponent<T>() ?? GameObject.AddComponent<T>();
+        public Component Get(Type type) => GameObject.GetComponent(type) ?? GameObject.AddComponent(type);
 
         public bool Created => !Destroyed;
-        public bool Destroyed => !managedObject;
-        public bool IsActive => ManagedObject.activeSelf;
+        public bool Destroyed => !gameObject;
+        public bool IsActive => GameObject.activeSelf;
         public RectTransform RectTransform => Get<RectTransform>();
 
-        public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.ManagedObject, worldPositionStays);
+        public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.GameObject, worldPositionStays);
         public void SetParent(GameObject gameObject, bool worldPositionStays = false) => SetParent(gameObject.transform, worldPositionStays);
-        public void SetParent(Transform transform, bool worldPositionStays = false) => ManagedObject.transform.SetParent(transform, worldPositionStays);
+        public void SetParent(Transform transform, bool worldPositionStays = false) => GameObject.transform.SetParent(transform, worldPositionStays);
 
-        public void SetActive(bool value) => ManagedObject.SetActive(value);
+        public void SetActive(bool value) => GameObject.SetActive(value);
 
-        public T AddComponent<T>() where T : Component => ManagedObject.AddComponent<T>();
+        public T AddComponent<T>() where T : Component => GameObject.AddComponent<T>();
 
         public virtual void Create(bool active = true)
         {
-            if (managedObject) return;
-            managedObject = new GameObject(name);
-            managedObject.SetActive(active);
+            if (gameObject) return;
+            gameObject = new GameObject(name);
+            gameObject.SetActive(active);
 
             foreach (var componentPair in Components)
             {
-                var component = ManagedObject.AddComponent(componentPair.Key) as ManagedComponent;
+                var component = GameObject.AddComponent(componentPair.Key) as ManagedComponent;
                 if (!component) continue;
 
                 component.Apply(componentPair.Value);
+            }
+
+            foreach (var child in Children)
+            {
+                child.SetParent(this);
             }
         }
 
         public virtual void Destroy()
         {
-            if (!managedObject) return;
-            UnityEngine.Object.Destroy(managedObject);
-            managedObject = null;
+            if (!gameObject) return;
+            UnityEngine.Object.Destroy(gameObject);
+            gameObject = null;
         }
     }
 }
