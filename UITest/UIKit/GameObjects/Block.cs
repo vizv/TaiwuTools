@@ -1,13 +1,18 @@
-﻿using UIKit.Core;
+﻿using UIKit.Components;
+using UIKit.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UITest.UIKit.GameObjects
+namespace UIKit.GameObjects
 {
     public class Block : ManagedGameObject
     {
         // FIXME: Add SerializableField Tag
         public Color? BackgroundColor = null;
+
+        // FIXME: Add SerializableField Tag
+        public BoxElement.ComponentAttributes Element = new BoxElement.ComponentAttributes();
+        public BoxElement BoxElement => Get<BoxElement>();
 
         public Image Background => Get<Image>();
 
@@ -19,6 +24,8 @@ namespace UITest.UIKit.GameObjects
             {
                 Background.color = BackgroundColor.Value;
             }
+
+            BoxElement.Apply(Element);
         }
     }
 }

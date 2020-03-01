@@ -245,6 +245,7 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
+    <Compile Include="UIKit\Components\BoxElement.cs" />
     <Compile Include="UIKit\Components\BoxModel.cs" />
     <Compile Include="UIKit\Core\Enums.cs" />
     <Compile Include="UIKit\Core\GameObjects\BoxModelGameObject.cs" />
