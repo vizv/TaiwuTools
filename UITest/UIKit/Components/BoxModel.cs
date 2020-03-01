@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UIKit.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,8 @@ namespace UIKit.Components
                         if (layoutGroup is HorizontalLayoutGroup) DestroyImmediate(layoutGroup);
                         layoutGroup = Get<VerticalLayoutGroup>();
                         break;
+                    default:
+                        throw new ArgumentException($"BoxModel with {Direction} is not supported");
                 }
 
                 return layoutGroup;

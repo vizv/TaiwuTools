@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UIKit.Core
 {
@@ -44,6 +45,8 @@ namespace UIKit.Core
         public bool Created => !Destroyed;
         public bool Destroyed => !gameObject;
         public bool IsActive => GameObject.activeSelf;
+
+        public LayoutElement LayoutElement => Get<LayoutElement>();
         public RectTransform RectTransform => Get<RectTransform>();
 
         public void SetParent(ManagedGameObject managedGameObject, bool worldPositionStays = false) => SetParent(managedGameObject.GameObject, worldPositionStays);

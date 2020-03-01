@@ -9,6 +9,7 @@ using System;
 using UIKit.GameObjects;
 using UIKit.Components;
 using UIKit.Core;
+using UnityEngine.UI;
 
 namespace UITest
 {
@@ -34,7 +35,6 @@ namespace UITest
             var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
             var cimage = dialog.GetComponent<CImage>();
 
-
             overlay = new Container.CanvasContainer()
             {
                 Name = "VizCanvas",
@@ -58,8 +58,10 @@ namespace UITest
                             new Container()
                             {
                                 Name = "TestBlock-1",
-                                Box = { PreferredSize = { 500, 0 } },
-                                BackgroundColor = Color.green,
+                                Box = {
+                                    PreferredSize = { 500, 0 },
+                                    ChildrenAlignment = TextAnchor.UpperLeft
+                                },
                             },
                             new Container()
                             {
@@ -74,73 +76,71 @@ namespace UITest
 
         private void Debug()
         {
-            return;
+            //return;
 
-            boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
-                ? Direction.Vertical
-                : Direction.Horizontal;
-            frame.BoxModel.Apply(boxModelArgs);
+            //boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
+            //    ? Direction.Vertical
+            //    : Direction.Horizontal;
+            //frame.BoxModel.Apply(boxModelArgs);
 
             //var vf = GameObject.Find("VizFrame");
             //if (!vf) return;
 
             //vf.AddComponent<Mask>();
 
-            //var tsv = new GameObject("TestScrollView", typeof(ScrollRect));
-            //var tsvRt = tsv.GetComponent<RectTransform>();
-            //tsvRt.SetParent(vf.transform, false);
-            //tsvRt.anchorMin = Vector2.zero;
-            //tsvRt.anchorMax = Vector2.one;
-            //tsvRt.sizeDelta = new Vector2(-40, -40);
-            ////tsvRt.sizeDelta = vf.GetComponent<RectTransform>().sizeDelta;
-            //var tsvSr = tsv.GetComponent<ScrollRect>();
-            //tsvSr.horizontal = false;
+            var vf = GameObject.Find("TestBlock-1");
 
+            var tsv = new GameObject("TestScrollView", typeof(ScrollRect), typeof(VerticalLayoutGroup));
+            var tsvRt = tsv.GetComponent<RectTransform>();
+            tsvRt.SetParent(vf.transform, false);
+            var tsvSr = tsv.GetComponent<ScrollRect>();
+            tsvSr.horizontal = false;
+            var tsvVlg = tsv.GetComponent<VerticalLayoutGroup>();
+            tsvVlg.childForceExpandWidth = true;
+            tsvVlg.childForceExpandHeight = true;
+            //tsvVlg.childAlignment = TextAnchor.UpperLeft;
 
-            //var tv = new GameObject("TestViewport", typeof(Image), typeof(Mask));
-            //var tvRt = tv.GetComponent<RectTransform>();
-            //tvRt.SetParent(tsvRt, false);
-            ////tvRt.sizeDelta = tsvRt.sizeDelta;
-            ////tvRt.sizeDelta = new Vector2(-80, -80);
-            //tvRt.anchorMin = Vector2.zero;
-            //tvRt.anchorMax = Vector2.one;
-            ////tvRt.anchoredPosition = new Vector2(0, 0.5f);
-            ////tvRt.pivot = new Vector2(0, 0.5f);
-            //var tvI = tv.GetComponent<Image>();
-            //var tvM = tv.GetComponent<Mask>();
+            var tv = new GameObject("TestViewport", typeof(Image), typeof(Mask), typeof(VerticalLayoutGroup));
+            var tvRt = tv.GetComponent<RectTransform>();
+            tvRt.SetParent(tsvRt, false);
+            var tvI = tv.GetComponent<Image>();
             //tvI.color = Color.red;
-            ////tvM.showMaskGraphic = false;
+            var tvM = tv.GetComponent<Mask>();
+            tvM.showMaskGraphic = true;
+            var tvVlg = tv.GetComponent<VerticalLayoutGroup>();
+            tvVlg.childForceExpandWidth = true;
+            tvVlg.childControlHeight = true;
+            tvVlg.childForceExpandHeight = true;
+            //tvVlg.childAlignment = TextAnchor.UpperLeft;
 
-            //var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup));
-            //var tcRt = tc.GetComponent<RectTransform>();
-            //tcRt.SetParent(tvRt, false);
-            //tcRt.anchoredPosition = new Vector2(0, 1);
-            ////tcRt.anchorMin = new Vector2(0, 1);
-            //tcRt.anchorMin = new Vector2(0, 0);
-            //tcRt.anchorMax = new Vector2(0, 1);
-            //tcRt.pivot = new Vector2(0, 1);
-            //var tcCsf = tc.GetComponent<ContentSizeFitter>();
-            //var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
-            //tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //tcVlg.spacing = 5;
-            //tcVlg.childControlWidth = false;
-            //tcVlg.childControlHeight = false;
-            //tcVlg.childForceExpandWidth = false;
-            //tcVlg.childForceExpandHeight = false;
-            //tcVlg.childAlignment = TextAnchor.UpperLeft;
+            var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup), typeof(Image));
+            var tcI = tv.GetComponent<Image>();
+            tcI.color = Color.red;
+            var tcRt = tc.GetComponent<RectTransform>();
+            tcRt.pivot = new Vector2(0, 1);
+            tcRt.SetParent(tvRt, false);
+            var tcCsf = tc.GetComponent<ContentSizeFitter>();
+            tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
+            tcVlg.spacing = 5;
+            tcVlg.childControlHeight = true;
+            tcVlg.childForceExpandWidth = true;
+            tcVlg.childForceExpandHeight = false;
+            tcVlg.childAlignment = TextAnchor.UpperCenter;
 
-            //tsvSr.viewport = tvRt;
-            //tsvSr.content = tcRt;
+            tsvSr.viewport = tvRt;
+            tsvSr.content = tcRt;
 
-            //for (var i = 0; i < 20; i++)
-            //{
-            //    var b = new GameObject($"block-{i}", typeof(Image));
-            //    var bRt = b.GetComponent<RectTransform>();
-            //    var bI = b.GetComponent<Image>();
-            //    bI.color = i == 0 ? Color.green : Color.blue;
-            //    bRt.sizeDelta = new Vector2(600, 600);
-            //    bRt.SetParent(tsvSr.content);
-            //}
+            for (var i = 0; i < 5; i++)
+            {
+                var b = new GameObject($"block-{i}", typeof(Image), typeof(LayoutElement));
+                var bRt = b.GetComponent<RectTransform>();
+                var bLe = b.GetComponent<LayoutElement>();
+                var bI = b.GetComponent<Image>();
+                bI.color = UnityEngine.Random.ColorHSV();
+                bLe.preferredHeight = 300;
+                bRt.SetParent(tsvSr.content);
+            }
 
             //var level = 0;
             ////debugText = Dump(tv.transform, ref level);
