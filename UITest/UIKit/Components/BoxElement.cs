@@ -23,17 +23,20 @@ namespace UIKit.Components
 
         public new class ComponentAttributes : ManagedComponent.ComponentAttributes
         {
+            // FIXME: Add SerializableField Tag
+            public List<float> MinimalSize = new List<float>();
             public float MinimalWidth => MinimalSize.Count > 0 ? MinimalSize[0] : 0;
             public float MinimalHeight => MinimalSize.Count > 1 ? MinimalSize[1] : MinimalWidth;
-            public List<float> MinimalSize = new List<float>();
 
+            // FIXME: Add SerializableField Tag
+            public List<float> PreferredSize = new List<float>();
             public float PreferredWidth => PreferredSize.Count > 0 ? PreferredSize[0] : 0;
             public float PreferredHeight => PreferredSize.Count > 1 ? PreferredSize[1] : PreferredWidth;
-            public List<float> PreferredSize = new List<float>();
 
+            // FIXME: Add SerializableField Tag
+            public List<float> FlexibleSize = new List<float>();
             public float FlexibleWidth => FlexibleSize.Count > 0 ? FlexibleSize[0] : (PreferredWidth > 0 ? 0 : 1);
             public float FlexibleHeight => FlexibleSize.Count > 1 ? FlexibleSize[1] : (PreferredHeight > 0 ? 0 : 1);
-            public List<float> FlexibleSize = new List<float>();
         }
     }
 }

@@ -246,8 +246,10 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="UIKit\Components\BoxElement.cs" />
-    <Compile Include="UIKit\Components\BoxModel.cs" />
+    <Compile Include="UIKit\Components\BoxGroup.cs" />
     <Compile Include="UIKit\Core\Enums.cs" />
+    <Compile Include="UIKit\Core\GameObjects\BoxGroupGameObject.cs" />
+    <Compile Include="UIKit\Core\GameObjects\BoxElementGameObject.cs" />
     <Compile Include="UIKit\Core\GameObjects\BoxModelGameObject.cs" />
     <Compile Include="UIKit\Core\IManagedObject.cs" />
     <Compile Include="UIKit\Core\ManagedComponent.cs" />

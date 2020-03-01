@@ -28,7 +28,7 @@ namespace UITest
         private Container frame;
         private Container.ScrollContainer scroll;
 
-        private BoxModel.ComponentAttributes boxModelArgs;
+        private BoxGroup.ComponentAttributes boxModelArgs;
 
         protected void Awake()
         {
@@ -39,7 +39,7 @@ namespace UITest
             overlay = new Container.CanvasContainer()
             {
                 Name = "VizCanvas",
-                Box =
+                Group =
                 {
                     Padding = { 80 },
                 },
@@ -48,10 +48,11 @@ namespace UITest
                     (frame = new Container()
                     {
                         Name = "VizFrame",
-                        Box = (boxModelArgs = new BoxModel.ComponentAttributes()
+                        Group = (boxModelArgs = new BoxGroup.ComponentAttributes()
                         {
                             Direction = Direction.Horizontal,
                             Padding = { 60 },
+                            Spacing = 20,
                         }),
                         BackgroundImage = cimage,
                         Children =
@@ -59,36 +60,37 @@ namespace UITest
                             (scroll = new Container.ScrollContainer()
                             {
                                 Name = "TestBlock-1",
-                                Box = {
+                                Group = {
+                                    ChildrenAlignment = TextAnchor.UpperLeft,
+                                    Spacing = 20,
+                                },
+                                Element =
+                                {
                                     PreferredSize = { 500, 0 },
-                                    ChildrenAlignment = TextAnchor.UpperLeft
                                 },
                                 ContentChildren =
                                 {
-                                    new Block()
+                                    new Container()
                                     {
                                         Name = "ColorBlock-R",
                                         Element = {
-                                            MinimalSize = { 0, 300 },
-                                            PreferredSize = { 0, 300 },
+                                            PreferredSize = { 0, 700 },
                                         },
                                         BackgroundColor = Color.red,
                                     },
-                                    new Block()
+                                    new Container()
                                     {
                                         Name = "ColorBlock-G",
                                         Element = {
-                                            MinimalSize = { 0, 300 },
-                                            PreferredSize = { 0, 300 },
+                                            PreferredSize = { 0, 700 },
                                         },
                                         BackgroundColor = Color.green,
                                     },
-                                    new Block()
+                                    new Container()
                                     {
                                         Name = "ColorBlock-B",
                                         Element = {
-                                            MinimalSize = { 0, 300 },
-                                            PreferredSize = { 0, 300 },
+                                            PreferredSize = { 0, 700 },
                                         },
                                         BackgroundColor = Color.blue,
                                     },
@@ -97,7 +99,7 @@ namespace UITest
                             new Container()
                             {
                                 Name = "TestBlock-2",
-                                BackgroundColor = Color.blue,
+                                BackgroundColor = Color.white,
                             },
                         }
                     }),
@@ -107,102 +109,12 @@ namespace UITest
 
         private void Debug()
         {
-            var scrollRect = scroll.Get<ScrollRect>();
-
-            var viewport = scrollRect.viewport;
-            viewport.DetachChildren();
-
-            var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup));
-            var tcRt = tc.GetComponent<RectTransform>();
-            tcRt.pivot = new Vector2(0, 1);
-            tcRt.SetParent(viewport.transform, false);
-            var tcCsf = tc.GetComponent<ContentSizeFitter>();
-            tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
-            tcVlg.spacing = 5;
-            tcVlg.childControlHeight = true;
-            tcVlg.childForceExpandWidth = true;
-            tcVlg.childForceExpandHeight = false;
-            tcVlg.childAlignment = TextAnchor.UpperCenter;
-
-            var content = tcRt;
-            scrollRect.content = content;
-
-            for (var i = 0; i < 5; i++)
-            {
-                var b = new GameObject($"block-{i}", typeof(Image), typeof(LayoutElement));
-                var bRt = b.GetComponent<RectTransform>();
-                var bLe = b.GetComponent<LayoutElement>();
-                var bI = b.GetComponent<Image>();
-                bI.color = UnityEngine.Random.ColorHSV();
-                bLe.preferredHeight = 300;
-                bRt.SetParent(content, false);
-            }
-
-            //var content = GameObject.Find("TestBlock-1:Content");
-            var level = 0;
-            debugText = Dump(content.transform, ref level);
             return;
 
             //boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
             //    ? Direction.Vertical
             //    : Direction.Horizontal;
             //frame.BoxModel.Apply(boxModelArgs);
-
-            //var vf = GameObject.Find("VizFrame");
-            //if (!vf) return;
-
-            //vf.AddComponent<Mask>();
-
-            var vf = GameObject.Find("TestBlock-1");
-
-            var tsv = new GameObject("TestScrollView", typeof(ScrollRect), typeof(VerticalLayoutGroup));
-            var tsvRt = tsv.GetComponent<RectTransform>();
-            tsvRt.SetParent(vf.transform, false);
-            var tsvSr = tsv.GetComponent<ScrollRect>();
-            tsvSr.horizontal = false;
-            var tsvVlg = tsv.GetComponent<VerticalLayoutGroup>();
-            tsvVlg.childForceExpandWidth = true;
-            tsvVlg.childForceExpandHeight = true;
-
-            var tv = new GameObject("TestViewport", typeof(Image), typeof(Mask), typeof(VerticalLayoutGroup));
-            var tvRt = tv.GetComponent<RectTransform>();
-            tvRt.SetParent(tsvRt, false);
-            var tvM = tv.GetComponent<Mask>();
-            tvM.showMaskGraphic = false;
-            var tvVlg = tv.GetComponent<VerticalLayoutGroup>();
-            tvVlg.childForceExpandWidth = true;
-            tvVlg.childForceExpandHeight = true;
-
-            //var tc = new GameObject("TestContent", typeof(ContentSizeFitter), typeof(VerticalLayoutGroup));
-            //var tcRt = tc.GetComponent<RectTransform>();
-            //tcRt.pivot = new Vector2(0, 1);
-            //tcRt.SetParent(tvRt, false);
-            //var tcCsf = tc.GetComponent<ContentSizeFitter>();
-            //tcCsf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-            //var tcVlg = tc.GetComponent<VerticalLayoutGroup>();
-            //tcVlg.spacing = 5;
-            //tcVlg.childControlHeight = true;
-            //tcVlg.childForceExpandWidth = true;
-            //tcVlg.childForceExpandHeight = false;
-            //tcVlg.childAlignment = TextAnchor.UpperCenter;
-
-            tsvSr.viewport = tvRt;
-            tsvSr.content = tcRt;
-
-            for (var i = 0; i < 5; i++)
-            {
-                var b = new GameObject($"block-{i}", typeof(Image), typeof(LayoutElement));
-                var bRt = b.GetComponent<RectTransform>();
-                var bLe = b.GetComponent<LayoutElement>();
-                var bI = b.GetComponent<Image>();
-                bI.color = UnityEngine.Random.ColorHSV();
-                bLe.preferredHeight = 300;
-                bRt.SetParent(scroll.Get<ScrollRect>().content);
-            }
-
-            //var level = 0;
-            ////debugText = Dump(tv.transform, ref level);
         }
 
         private void IndexResources()

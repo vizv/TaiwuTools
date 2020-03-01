@@ -3,15 +3,11 @@ using UnityEngine.UI;
 
 namespace UIKit.Core.GameObjects
 {
-    public class BoxModelGameObject : ManagedGameObject
+    public class BoxGroupGameObject : ManagedGameObject
     {
         // FIXME: Add SerializableField Tag
         public BoxGroup.ComponentAttributes Group = new BoxGroup.ComponentAttributes();
         public BoxGroup BoxGroup => Get<BoxGroup>();
-
-        // FIXME: Add SerializableField Tag
-        public BoxElement.ComponentAttributes Element = new BoxElement.ComponentAttributes();
-        public BoxElement BoxElement => Get<BoxElement>();
 
         public HorizontalOrVerticalLayoutGroup LayoutGroup => BoxGroup.LayoutGroup;
 
@@ -20,7 +16,6 @@ namespace UIKit.Core.GameObjects
             base.Create(active);
 
             BoxGroup.Apply(Group);
-            BoxElement.Apply(Element);
         }
     }
 }

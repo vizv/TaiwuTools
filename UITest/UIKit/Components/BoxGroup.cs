@@ -6,12 +6,11 @@ using UnityEngine.UI;
 
 namespace UIKit.Components
 {
-    public class BoxModel : ManagedComponent
+    public class BoxGroup : ManagedComponent
     {
         // FIXME: Add SerializableField Tag
         private Direction Direction;
 
-        public LayoutElement LayoutElement => Get<LayoutElement>();
         public HorizontalOrVerticalLayoutGroup LayoutGroup {
             get
             {
@@ -44,34 +43,23 @@ namespace UIKit.Components
             Direction = attributes.Direction;
             LayoutGroup.padding = attributes.RectOffset;
             LayoutGroup.childAlignment = attributes.ChildrenAlignment;
-            LayoutGroup.childForceExpandWidth = false;
-            LayoutGroup.childForceExpandHeight = false;
-
-            LayoutElement.minWidth = attributes.MinimalWidth;
-            LayoutElement.minHeight = attributes.MinimalHeight;
-            LayoutElement.preferredWidth = attributes.PreferredWidth;
-            LayoutElement.preferredHeight = attributes.PreferredHeight;
-            LayoutElement.flexibleWidth = attributes.FlexibleWidth;
-            LayoutElement.flexibleHeight = attributes.FlexibleHeight;
+            LayoutGroup.spacing = attributes.Spacing;
+            LayoutGroup.childControlHeight = attributes.ControlChildHeight;
+            LayoutGroup.childControlWidth = attributes.ControlChildWidth;
+            LayoutGroup.childForceExpandHeight = attributes.ForceExpandChildHeight;
+            LayoutGroup.childForceExpandWidth = attributes.ForceExpandChildWidth;
         }
 
         public new class ComponentAttributes : ManagedComponent.ComponentAttributes
         {
+            // FIXME: Add SerializableField Tag
             public Direction Direction = Direction.Vertical;
+
+            // FIXME: Add SerializableField Tag
             public TextAnchor ChildrenAlignment = TextAnchor.MiddleCenter;
 
-            public float MinimalWidth => MinimalSize.Count > 0 ? MinimalSize[0] : 0;
-            public float MinimalHeight => MinimalSize.Count > 1 ? MinimalSize[1] : MinimalWidth;
-            public List<float> MinimalSize = new List<float>();
-
-            public float PreferredWidth => PreferredSize.Count > 0 ? PreferredSize[0] : 0;
-            public float PreferredHeight => PreferredSize.Count > 1 ? PreferredSize[1] : PreferredWidth;
-            public List<float> PreferredSize = new List<float>();
-
-            public float FlexibleWidth => FlexibleSize.Count > 0 ? FlexibleSize[0] : (PreferredWidth > 0 ? 0 : 1);
-            public float FlexibleHeight => FlexibleSize.Count > 1 ? FlexibleSize[1] : (PreferredHeight > 0 ? 0 : 1);
-            public List<float> FlexibleSize = new List<float>();
-
+            // FIXME: Add SerializableField Tag
+            public List<int> Padding = new List<int>();
             public RectOffset RectOffset
             {
                 get
@@ -105,7 +93,21 @@ namespace UIKit.Components
                     return new RectOffset(left, right, top, bottom);
                 }
             }
-            public List<int> Padding = new List<int>();
+
+            // FIXME: Add SerializableField Tag
+            public float Spacing = 0;
+
+            // FIXME: Add SerializableField Tag
+            public bool ControlChildHeight = true;
+
+            // FIXME: Add SerializableField Tag
+            public bool ControlChildWidth = true;
+
+            // FIXME: Add SerializableField Tag
+            public bool ForceExpandChildHeight = false;
+
+            // FIXME: Add SerializableField Tag
+            public bool ForceExpandChildWidth = false;
         }
     }
 }

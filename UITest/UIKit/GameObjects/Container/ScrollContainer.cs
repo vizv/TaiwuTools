@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using UIKit.Components;
 using UIKit.Core;
+using UIKit.Core.GameObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +11,9 @@ namespace UIKit.GameObjects
     {
         public class ScrollContainer : Container
         {
+            // Override group field as layout group for Content
             // FIXME: Add SerializableField Tag
-            public Direction Direction = Direction.Vertical;
+            public new BoxGroup.ComponentAttributes Group = new BoxGroup.ComponentAttributes();
 
             // FIXME: Add SerializableField Tag
             public List<ManagedGameObject> ContentChildren = new List<ManagedGameObject>();
@@ -21,37 +24,42 @@ namespace UIKit.GameObjects
             {
                 base.Create(active);
 
-                ScrollRect.horizontal = Direction != Direction.Vertical;
-                ScrollRect.vertical = Direction != Direction.Horizontal;
+                ScrollRect.horizontal = Group.Direction != Direction.Vertical;
+                ScrollRect.vertical = Group.Direction != Direction.Horizontal;
                 LayoutGroup.childForceExpandWidth = true;
                 LayoutGroup.childForceExpandHeight = true;
 
-                var viewport = new Viewport()
-                {
+                // FIXME - orphan on destroy
+                var viewport = new Viewport() {
                     Name = $"{Name}:Viewport",
+                    Group =
+                    {
+                        ForceExpandChildWidth = true,
+                        ForceExpandChildHeight = true,
+                    }
                 };
-                ScrollRect.viewport = viewport.RectTransform;
 
-                var content = new Content()
-                {
-                    Name = $"{Name}:Content"
+                // FIXME - orphan on destroy
+                var content = new Content() {
+                    Name = $"{Name}:Content",
+                    Group = {
+                        Spacing = Group.Spacing,
+                        ControlChildHeight = true,
+                        ControlChildWidth = true,
+                        ForceExpandChildWidth = true,
+                        ForceExpandChildHeight = false,
+                    },
                 };
-                ScrollRect.content = content.RectTransform;
 
-                foreach (var contentChild in ContentChildren)
-                {
-                    contentChild.SetParent(content);
-                    //UITest.Main.Logger.Log($"{contentChild.Name}:{contentChild.LayoutElement.preferredHeight}");
-                }
-                UITest.Main.Logger.Log($"{content.Name}:{content.LayoutElement.preferredHeight}");
-                //Get<GraphicRaycaster>();
-
+                foreach (var contentChild in ContentChildren) contentChild.SetParent(content);
                 content.SetParent(viewport);
                 viewport.SetParent(this);
-                //Canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+                ScrollRect.viewport = viewport.RectTransform;
+                ScrollRect.content = content.RectTransform;
             }
 
-            public class Viewport : Container
+            protected class Viewport : Container
             {
                 public Mask Mask => Get<Mask>();
 
@@ -59,20 +67,14 @@ namespace UIKit.GameObjects
                 {
                     base.Create(active);
 
-                    LayoutGroup.childForceExpandWidth = true;
-                    LayoutGroup.childForceExpandHeight = true;
-
-                    // FIXME: debug - remove
-                    Get<Image>().color = Color.cyan;
-                    Mask.showMaskGraphic = true;
+                    // color doesn't matter here, as long as there is a valid image
+                    Get<Image>().color = Color.black;
+                    Mask.showMaskGraphic = false;
                 }
             }
 
-            public class Content : ManagedGameObject
+            protected class Content : BoxGroupGameObject
             {
-                // FIXME: hack
-                private HorizontalOrVerticalLayoutGroup LayoutGroup => Get<VerticalLayoutGroup>();
-
                 public ContentSizeFitter ContentSizeFitter => Get<ContentSizeFitter>();
 
                 public override void Create(bool active = true)
@@ -80,13 +82,9 @@ namespace UIKit.GameObjects
                     base.Create(active);
 
                     RectTransform.pivot = new Vector2(0, 1);
-                    LayoutGroup.spacing = 5;
-                    LayoutGroup.childControlHeight = true;
-                    LayoutGroup.childForceExpandWidth = true;
-                    LayoutGroup.childForceExpandHeight = false;
                     LayoutGroup.childAlignment = TextAnchor.UpperLeft;
 
-                    //ContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+                    ContentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
                 }
             }
         }
