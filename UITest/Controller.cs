@@ -61,6 +61,8 @@ namespace UITest
                             {
                                 Name = "TestBlock-1",
                                 Group = {
+                                    // FIXME: horizontal doesn't work
+                                    //Direction = Direction.Horizontal,
                                     ChildrenAlignment = TextAnchor.UpperLeft,
                                     Spacing = 20,
                                 },
@@ -74,7 +76,7 @@ namespace UITest
                                     {
                                         Name = "ColorBlock-R",
                                         Element = {
-                                            PreferredSize = { 0, 700 },
+                                            PreferredSize = { 700 },
                                         },
                                         BackgroundColor = Color.red,
                                     },
@@ -82,7 +84,7 @@ namespace UITest
                                     {
                                         Name = "ColorBlock-G",
                                         Element = {
-                                            PreferredSize = { 0, 700 },
+                                            PreferredSize = { 700 },
                                         },
                                         BackgroundColor = Color.green,
                                     },
@@ -90,7 +92,7 @@ namespace UITest
                                     {
                                         Name = "ColorBlock-B",
                                         Element = {
-                                            PreferredSize = { 0, 700 },
+                                            PreferredSize = { 700 },
                                         },
                                         BackgroundColor = Color.blue,
                                     },

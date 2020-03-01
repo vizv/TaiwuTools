@@ -1,4 +1,4 @@
 ﻿namespace UIKit.Core
 {
-    public enum Direction { Horizontal, Vertical, Both }
+    public enum Direction { Horizontal, Vertical }
 }

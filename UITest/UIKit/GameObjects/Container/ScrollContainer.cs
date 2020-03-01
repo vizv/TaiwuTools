@@ -43,11 +43,12 @@ namespace UIKit.GameObjects
                 var content = new Content() {
                     Name = $"{Name}:Content",
                     Group = {
+                        Direction = Group.Direction,
                         Spacing = Group.Spacing,
                         ControlChildHeight = true,
                         ControlChildWidth = true,
-                        ForceExpandChildWidth = true,
-                        ForceExpandChildHeight = false,
+                        ForceExpandChildWidth = Group.Direction == Direction.Vertical,
+                        ForceExpandChildHeight = Group.Direction == Direction.Horizontal,
                     },
                 };
 
