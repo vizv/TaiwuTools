@@ -245,7 +245,10 @@
   <ItemGroup>
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
+    <Compile Include="TaiwuUIKit\GameObjects\BaseScroll.cs" />
+    <Compile Include="TaiwuUIKit\GameObjects\BaseText.cs" />
     <Compile Include="TaiwuUIKit\GameObjects\BaseFrame.cs" />
+    <Compile Include="UIKit\Components\TextControl.cs" />
     <Compile Include="UIKit\Components\BoxElement.cs" />
     <Compile Include="UIKit\Components\BoxGroup.cs" />
     <Compile Include="UIKit\Core\Enums.cs" />
@@ -256,6 +259,7 @@
     <Compile Include="UIKit\Core\ManagedComponent.cs" />
     <Compile Include="UIKit\Core\ComponentAttributes.cs" />
     <Compile Include="UIKit\GameObjects\Block.cs" />
+    <Compile Include="UIKit\GameObjects\Label.cs" />
     <Compile Include="UIKit\GameObjects\Container.cs" />
     <Compile Include="UIKit\Core\ManagedGameObject.cs" />
     <Compile Include="UIKit\GameObjects\Container\ScrollContainer.cs" />

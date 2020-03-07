@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using UIKit.Core;
 using UIKit.GameObjects;
 using UnityEngine;
 
 namespace TaiwuUIKit.GameObjects
 {
-    public class BaseFrame : Container
+    public class BaseScroll : Container.ScrollContainer
     {
-        // FIXME: Add SerializableField Tag
-        public Direction Direction = Direction.Horizontal;
-
         public override void Create(bool active = true)
         {
             // FIXME: use a resource loader
@@ -17,10 +13,8 @@ namespace TaiwuUIKit.GameObjects
             var backgroundImage = dialog.GetComponent<CImage>();
             BackgroundImage = backgroundImage;
 
-            // Default padding
-            Group.Direction = Direction;
             Group.Padding = new List<int>() { 20 };
-            Group.Spacing = 20;
+            Group.Spacing = 10;
 
             base.Create(active);
         }

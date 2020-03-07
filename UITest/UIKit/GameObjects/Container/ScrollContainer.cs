@@ -16,12 +16,15 @@ namespace UIKit.GameObjects
             public new BoxGroup.ComponentAttributes Group = new BoxGroup.ComponentAttributes();
 
             // FIXME: Add SerializableField Tag
-            public List<ManagedGameObject> ContentChildren = new List<ManagedGameObject>();
+            public Dictionary<string, ManagedGameObject> ContentChildren = new Dictionary<string, ManagedGameObject>();
 
             public ScrollRect ScrollRect => Get<ScrollRect>();
 
+            private Content content;
+
             public override void Create(bool active = true)
             {
+                base.Group.Padding = Group.Padding;
                 base.Create(active);
 
                 ScrollRect.horizontal = Group.Direction != Direction.Vertical;
@@ -40,7 +43,7 @@ namespace UIKit.GameObjects
                 };
 
                 // FIXME - orphan on destroy
-                var content = new Content() {
+                content = new Content() {
                     Name = $"{Name}:Content",
                     Group = {
                         Direction = Group.Direction,
@@ -52,12 +55,18 @@ namespace UIKit.GameObjects
                     },
                 };
 
-                foreach (var contentChild in ContentChildren) contentChild.SetParent(content);
+                foreach (var contentChild in ContentChildren) contentChild.Value.SetParent(content);
                 content.SetParent(viewport);
                 viewport.SetParent(this);
 
                 ScrollRect.viewport = viewport.RectTransform;
                 ScrollRect.content = content.RectTransform;
+            }
+
+            public void Add(string key, ManagedGameObject gameObject)
+            {
+                ContentChildren[key] = gameObject;
+                gameObject.SetParent(content);
             }
 
             protected class Viewport : Container

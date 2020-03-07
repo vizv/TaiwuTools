@@ -8,9 +8,9 @@ using System.Collections;
 using System;
 using UIKit.GameObjects;
 using UIKit.Components;
+using TaiwuUIKit.GameObjects;
 using UIKit.Core;
 using UnityEngine.UI;
-using TaiwuUIKit.GameObjects;
 
 namespace UITest
 {
@@ -47,46 +47,18 @@ namespace UITest
                         Name = "VizFrame",
                         Children =
                         {
-                            (scroll = new Container.ScrollContainer()
+                            (scroll = new BaseScroll()
                             {
                                 Name = "TestBlock-1",
                                 Group = {
                                     // FIXME: horizontal doesn't work
                                     //Direction = Direction.Horizontal,
                                     ChildrenAlignment = TextAnchor.UpperLeft,
-                                    Spacing = 20,
                                 },
                                 Element =
                                 {
                                     PreferredSize = { 500, 0 },
                                 },
-                                ContentChildren =
-                                {
-                                    new Container()
-                                    {
-                                        Name = "ColorBlock-R",
-                                        Element = {
-                                            PreferredSize = { 700 },
-                                        },
-                                        BackgroundColor = Color.red,
-                                    },
-                                    new Container()
-                                    {
-                                        Name = "ColorBlock-G",
-                                        Element = {
-                                            PreferredSize = { 700 },
-                                        },
-                                        BackgroundColor = Color.green,
-                                    },
-                                    new Container()
-                                    {
-                                        Name = "ColorBlock-B",
-                                        Element = {
-                                            PreferredSize = { 700 },
-                                        },
-                                        BackgroundColor = Color.blue,
-                                    },
-                                }
                             }),
                             new Container()
                             {
@@ -101,6 +73,14 @@ namespace UITest
 
         private void Debug()
         {
+            IndexResources();
+
+            return;
+
+            var label = GameObject.Find("LabelBlock-Test");
+            var level = 0;
+            debugText = Dump(label.transform, ref level);
+
             return;
 
             //boxModelArgs.Direction = boxModelArgs.Direction == Direction.Horizontal
@@ -122,6 +102,14 @@ namespace UITest
             {
                 resourceIndex[path] = null;
                 indexQueue.Enqueue(path);
+                var resourceItem = new BaseText()
+                {
+                    Name = $"ResourceItem:{path}",
+                    Text = path,
+                    Alignment = HorizontalAnchor.Left,
+                    UseBoldFont = false,
+                };
+                scroll.Add(path, resourceItem);
                 //Main.Logger.Log($"{path}: {resource.name} - {resource.GetType().FullName}");
             }
             StartCoroutine(LoadResource());
