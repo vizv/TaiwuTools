@@ -27,7 +27,7 @@ namespace UIKit.Components
             public Font Font = null;
 
             // FIXME: Add SerializableField Tag
-            public int FontSize = 16;
+            public int FontSize = 18;
 
             // FIXME: Add SerializableField Tag
             public Color Color = Color.white;

@@ -2,6 +2,7 @@
 using UIKit.Core;
 using UIKit.GameObjects;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TaiwuUIKit.GameObjects
 {
@@ -14,7 +15,7 @@ namespace TaiwuUIKit.GameObjects
         {
             // FIXME: use a resource loader
             var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
-            var backgroundImage = dialog.GetComponent<CImage>();
+            var backgroundImage = dialog.GetComponent<CImage>() as Image;
             BackgroundImage = backgroundImage;
 
             // Default padding

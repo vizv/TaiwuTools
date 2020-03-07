@@ -48,6 +48,7 @@ namespace UIKit.GameObjects
                     Group = {
                         Direction = Group.Direction,
                         Spacing = Group.Spacing,
+                        Padding = { 0, 20 }, // FIXME: hack
                         ControlChildHeight = true,
                         ControlChildWidth = true,
                         ForceExpandChildWidth = Group.Direction == Direction.Vertical,
@@ -63,11 +64,8 @@ namespace UIKit.GameObjects
                 ScrollRect.content = content.RectTransform;
             }
 
-            public void Add(string key, ManagedGameObject gameObject)
-            {
-                ContentChildren[key] = gameObject;
-                gameObject.SetParent(content);
-            }
+            public bool Contains(string key) => ContentChildren.ContainsKey(key);
+            public void Add(string key, ManagedGameObject gameObject) => (ContentChildren[key] = gameObject).SetParent(content);
 
             protected class Viewport : Container
             {

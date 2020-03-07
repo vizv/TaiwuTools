@@ -49,7 +49,7 @@ namespace UITest
                         {
                             (scroll = new BaseScroll()
                             {
-                                Name = "TestBlock-1",
+                                Name = "ResourceList",
                                 Group = {
                                     // FIXME: horizontal doesn't work
                                     //Direction = Direction.Horizontal,
@@ -60,10 +60,9 @@ namespace UITest
                                     PreferredSize = { 500, 0 },
                                 },
                             }),
-                            new Container()
+                            new BaseFrame()
                             {
-                                Name = "TestBlock-2",
-                                BackgroundColor = Color.white,
+                                Name = "ResourceInfo",
                             },
                         }
                     }),
@@ -77,9 +76,22 @@ namespace UITest
 
             return;
 
-            var label = GameObject.Find("LabelBlock-Test");
+            //debugText = "";
+            //var label = GameObject.Find("StartMenuButton");
+            //var image = label.GetComponent<Image>();
+            //debugText += $"\n{image.sprite}";
+            //var text = label.transform.GetChild(1).gameObject.GetComponent<Text>();
+            //debugText += $"\n{text.fontSize}";
+            //var level = 0;
+            //debugText += "\n" + Dump(text.transform, ref level);
+
+            // FIXME: use a resource loader
+            var mainmenu = Resources.Load<GameObject>("oldsceneprefabs/mianmenuback");
             var level = 0;
-            debugText = Dump(label.transform, ref level);
+            Main.Logger.Log("=================== WALK BEGIN");
+            Main.Logger.Log(Walk(mainmenu, level));
+            Main.Logger.Log("=================== WALK END");
+            //debugText = Walk(mainmenu, level);
 
             return;
 
@@ -102,15 +114,51 @@ namespace UITest
             {
                 resourceIndex[path] = null;
                 indexQueue.Enqueue(path);
-                var resourceItem = new BaseText()
+
+                var prefix = "";
+                var p = path;
+                var level = 0;
+                while (true)
                 {
-                    Name = $"ResourceItem:{path}",
-                    Text = path,
-                    Alignment = HorizontalAnchor.Left,
-                    UseBoldFont = false,
-                };
-                scroll.Add(path, resourceItem);
-                //Main.Logger.Log($"{path}: {resource.name} - {resource.GetType().FullName}");
+                    var index = p.IndexOf('/');
+                    if (index == -1)
+                    {
+                        if (!scroll.Contains(path))
+                        {
+                            var leafItem = new BaseButton()
+                            {
+                                Name = $"LeafItem:{path}",
+                                Text = $"{string.Concat(Enumerable.Repeat("    ", level))}* {p}",
+                                Alignment = HorizontalAnchor.Left,
+                                UseBoldFont = false,
+                                Color = Color.red,
+                            };
+
+                            scroll.Add(path, leafItem);
+                        }
+
+                        break;
+                    }
+
+                    var segment = p.Substring(0, index);
+                    prefix += segment;
+
+                    if (!scroll.Contains(prefix))
+                    {
+                        var directoryItem = new BaseButton()
+                        {
+                            Name = $"DirectoryItem:{prefix}",
+                            Text = $"{string.Concat(Enumerable.Repeat("    ", level))}- {segment}",
+                            Alignment = HorizontalAnchor.Left,
+                            UseBoldFont = true,
+                        };
+
+                        scroll.Add(prefix, directoryItem);
+                    }
+
+                    p = p.Substring(index + 1);
+                    level++;
+                }
             }
             StartCoroutine(LoadResource());
         }
@@ -223,6 +271,30 @@ namespace UITest
             GUILayout.Label("调试输出：");
             GUILayout.Label(debugText, valueStyle);
             GUILayout.EndVertical();
+        }
+
+        private static string Walk(GameObject gameObject, int level)
+        {
+            var tf = gameObject.transform;
+            var components = tf.GetComponents<Component>();
+            var gameBehaviours = components.Where(comp => comp is MonoBehaviour && comp.GetType().Namespace == null).ToArray();
+            var gameBehavioursOutput = string.Join(",", gameBehaviours.Select(comp => comp.GetType().Name));
+            var builtinBehaviours = components.Where(comp => comp is MonoBehaviour && comp.GetType().Namespace != null).ToArray();
+            var builtinBehavioursOutput = string.Join(",", builtinBehaviours.Select(comp => comp.GetType().Name));
+            var otherComponents = components.Where(comp => !(comp is MonoBehaviour)).ToArray();
+            var otherComponentsOutput = string.Join(",", otherComponents.Select(comp => comp.GetType().Name));
+
+            var output = $"\n{string.Concat(Enumerable.Repeat("  ", level))}- {tf.GetSiblingIndex()}:{tf.name}";
+            if (gameBehaviours.Length > 0) output += $" game=[{gameBehavioursOutput}]";
+            if (builtinBehaviours.Length > 0) output += $" builtin=[{builtinBehavioursOutput}]";
+            if (otherComponents.Length > 0) output += $" components=[{otherComponentsOutput}]";
+            for (var i = 0; i < tf.childCount; i++)
+            {
+                var child = tf.GetChild(i).gameObject;
+                output += Walk(child, level + 1);
+            }
+                
+            return output;
         }
 
         private static string Dump(Transform tf, ref int level, Transform childTf = null)

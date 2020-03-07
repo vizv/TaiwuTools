@@ -246,6 +246,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="TaiwuUIKit\GameObjects\BaseScroll.cs" />
+    <Compile Include="TaiwuUIKit\GameObjects\BaseButton.cs" />
     <Compile Include="TaiwuUIKit\GameObjects\BaseText.cs" />
     <Compile Include="TaiwuUIKit\GameObjects\BaseFrame.cs" />
     <Compile Include="UIKit\Components\TextControl.cs" />
