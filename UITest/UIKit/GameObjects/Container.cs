@@ -1,5 +1,4 @@
-﻿using UIKit.Components;
-using UIKit.Core.GameObjects;
+﻿using UIKit.Core.GameObjects;
 using UnityEngine;
 using UnityEngine.UI;
 

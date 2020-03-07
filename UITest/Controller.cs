@@ -10,6 +10,7 @@ using UIKit.GameObjects;
 using UIKit.Components;
 using UIKit.Core;
 using UnityEngine.UI;
+using TaiwuUIKit.GameObjects;
 
 namespace UITest
 {
@@ -32,10 +33,6 @@ namespace UITest
 
         protected void Awake()
         {
-            // FIXME: use a resource loader
-            var dialog = Resources.Load<GameObject>("prefabs/ui/views/ui_dialog").transform.Find("Dialog");
-            var cimage = dialog.GetComponent<CImage>();
-
             overlay = new Container.CanvasContainer()
             {
                 Name = "VizCanvas",
@@ -45,16 +42,9 @@ namespace UITest
                 },
                 Children =
                 {
-                    (frame = new Container()
+                    (frame = new BaseFrame()
                     {
                         Name = "VizFrame",
-                        Group = (boxModelArgs = new BoxGroup.ComponentAttributes()
-                        {
-                            Direction = Direction.Horizontal,
-                            Padding = { 60 },
-                            Spacing = 20,
-                        }),
-                        BackgroundImage = cimage,
                         Children =
                         {
                             (scroll = new Container.ScrollContainer()
